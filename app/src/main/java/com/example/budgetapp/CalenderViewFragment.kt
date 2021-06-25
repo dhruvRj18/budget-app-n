@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.example.budgetapp.databinding.FragmentCalenderViewBinding
 import com.google.android.material.snackbar.Snackbar
 
@@ -24,12 +26,11 @@ class CalenderViewFragment : Fragment(R.layout.fragment_calender_view) {
         binding.calView.setOnDateChangeListener { view, year, month, dayOfMonth ->
 
 
+            val selectedDate = "${dayOfMonth} / ${month + 1} / ${year}"
+            val action = CalenderViewFragmentDirections.actionCalenderViewFragmentToBudgetEntryFragment().setSelectedDate(selectedDate)
+            findNavController().navigate(action)
 
-            Snackbar.make(
-                binding.calViewConstraint,
-                "Data: ${dayOfMonth} / ${month + 1} / ${year}",
-                Snackbar.LENGTH_SHORT
-            ).show()
+
 
 
         }

@@ -12,6 +12,7 @@ class GraphsFragment: Fragment(R.layout.fragment_graphs) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentGraphsBinding.bind(view)
+        setHasOptionsMenu(true)
         activity?.title = "Graphical Reports"
 
     }

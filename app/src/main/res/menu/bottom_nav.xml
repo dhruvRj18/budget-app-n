@@ -2,15 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/editBudget"
+        android:id="@+id/calenderViewFragment"
         android:icon="@drawable/ic_edit"
         android:title="Enter Budget"/>
     <item
-        android:id="@+id/reports"
+        android:id="@+id/reportsFragment"
         android:icon="@drawable/ic_file"
         android:title="See Reports"/>
     <item
-        android:id="@+id/graphs"
+        android:id="@+id/graphsFragment"
         android:icon="@drawable/ic_graph"
         android:title="Spending Graphs"/>
 </menu>

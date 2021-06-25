@@ -1,40 +1,32 @@
 package com.example.budgetapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.view.Menu
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.onNavDestinationSelected
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.example.budgetapp.databinding.ActivityMainBinding
-import com.google.android.material.snackbar.Snackbar
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val profileFragment = ProfileFragment()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
-        val calView = CalenderViewFragment()
-        val reportFragment = ReportsFragment()
-        val graphFragment = GraphsFragment()
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
+        binding.bottomNavBar.setupWithNavController(navHostFragment!!.findNavController())
 
-        setCurrentFragment(calView)
-        binding.bottomNavBar.setOnNavigationItemSelectedListener {
-            when(it.itemId){
-                R.id.editBudget -> setCurrentFragment(calView)
-                R.id.reports -> setCurrentFragment(reportFragment)
-                R.id.graphs -> setCurrentFragment(graphFragment)
-            }
-            true
-        }
 
-    }
-    public fun setActinBarTitle(title:String){
-        supportActionBar?.title = title
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -43,15 +35,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
         when(item.itemId){
-            R.id.profile -> setCurrentFragment(profileFragment)
+            R.id.profileFragment-> startActivity(Intent(this,ProfileActivity::class.java))
         }
+
         return true
     }
 
     private fun setCurrentFragment(fragment:Fragment){
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.frameLayoutMain,fragment)
+            replace(R.id.nav_host_fragment,fragment)
             commit()
         }
     }

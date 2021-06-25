@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/calenderViewFragment">
+
+    <fragment
+        android:id="@+id/calenderViewFragment"
+        android:name="com.example.budgetapp.CalenderViewFragment"
+        android:label="CalenderViewFragment" >
+        <action
+            android:id="@+id/action_calenderViewFragment_to_budgetEntryFragment"
+            app:destination="@id/budgetEntryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/budgetEntryFragment"
+        android:name="com.example.budgetapp.BudgetEntryFragment"
+        android:label="BudgetEntryFragment" />
+    <fragment
+        android:id="@+id/graphsFragment"
+        android:name="com.example.budgetapp.GraphsFragment"
+        android:label="GraphsFragment" />
+    <fragment
+        android:id="@+id/reportsFragment"
+        android:name="com.example.budgetapp.ReportsFragment"
+        android:label="ReportsFragment" />
+</navigation>

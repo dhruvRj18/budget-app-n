@@ -15,12 +15,16 @@ class CalenderViewFragment : Fragment(R.layout.fragment_calender_view) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentCalenderViewBinding.bind(view)
+        setHasOptionsMenu(true)
         activity?.title = "Enter Your Budget"
         binding.textView.setOnClickListener {
 
         }
 
         binding.calView.setOnDateChangeListener { view, year, month, dayOfMonth ->
+
+
+
             Snackbar.make(
                 binding.calViewConstraint,
                 "Data: ${dayOfMonth} / ${month + 1} / ${year}",

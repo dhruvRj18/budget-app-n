@@ -10,6 +10,7 @@ class ReportsFragment: Fragment(R.layout.fragment_reports) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentReportsBinding.bind(view)
+        setHasOptionsMenu(true)
         activity?.title = "Spending Reports"
     }
 }

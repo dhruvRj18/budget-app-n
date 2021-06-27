@@ -10,12 +10,10 @@ import com.google.android.material.snackbar.Snackbar
 class BudgetEntryFragment: Fragment(R.layout.fragment_budget_entry) {
     lateinit var binding: FragmentBudgetEntryBinding
     val args:CalenderViewFragmentArgs  by navArgs()
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentBudgetEntryBinding.bind(view)
         activity?.title = "Enter Budget for: ${args.selectedDate}"
         Snackbar.make(binding.budgetEntryConstraint,""+args.selectedDate,Snackbar.LENGTH_SHORT).show()
-
     }
 }

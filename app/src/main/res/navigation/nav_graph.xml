@@ -35,4 +35,8 @@
         android:id="@+id/reportsFragment"
         android:name="com.example.budgetapp.ReportsFragment"
         android:label="ReportsFragment" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.budgetapp.ProfileFragment"
+        android:label="ProfileFragment" />
 </navigation>

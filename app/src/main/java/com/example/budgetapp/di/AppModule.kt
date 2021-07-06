@@ -26,5 +26,9 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun provideProfileDao(db:BudgetDatabase) = db.getProfileDao()
+
+    @Singleton
+    @Provides
     fun provideBudgetDao(db:BudgetDatabase) = db.getBudgetDao()
 }

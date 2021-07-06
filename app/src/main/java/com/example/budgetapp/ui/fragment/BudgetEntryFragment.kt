@@ -24,5 +24,6 @@ class BudgetEntryFragment : Fragment(R.layout.fragment_budget_entry) {
         activity?.title = "Enter Budget for: ${args.selectedDate}"
         Snackbar.make(binding.budgetEntryConstraint, "" + args.selectedDate, Snackbar.LENGTH_SHORT)
             .show()
+        viewModel.callToast()
     }
 }

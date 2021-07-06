@@ -6,13 +6,16 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.budgetapp.entities.Budget
+import com.example.budgetapp.entities.Profile
 
 @Database(
-    entities = [Budget::class],
+    entities = [Budget::class, Profile::class],
     version = 1,
     exportSchema = true
 )
-
+@TypeConverters(Converters::class)
 abstract class BudgetDatabase : RoomDatabase() {
     abstract fun getBudgetDao():BudgetDao
+    abstract fun getProfileDao():ProfileDao
+
 }

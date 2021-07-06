@@ -11,9 +11,9 @@ import kotlinx.coroutines.flow.flow
 @Dao
 interface ProfileDao {
 
-   /* @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertProfileData(profile: Profile)
-*/
+
     @Query("SELECT * from profile_table")
     suspend fun getProfileData():List<Profile>
 

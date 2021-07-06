@@ -33,6 +33,10 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+    fun insertProfileData(profile: Profile) = viewModelScope.launch {
+        profileRepository.insertProfileData(profile )
+    }
+
 
     sealed class MyEvent{
         object navigateToProfileFragment : MyEvent()

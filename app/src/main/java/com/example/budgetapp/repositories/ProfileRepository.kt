@@ -9,6 +9,8 @@ import javax.inject.Inject
 class ProfileRepository @Inject constructor(val profileDao: ProfileDao) {
 
 
+    suspend fun insertProfileData(profile: Profile) = profileDao.insertProfileData(profile)
+
     suspend fun getProfile() = profileDao.getProfileData()
 
 }

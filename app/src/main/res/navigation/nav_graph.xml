@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/calenderViewFragment"
-        android:name="com.example.budgetapp.CalenderViewFragment"
+        android:name="com.example.budgetapp.ui.fragment.CalenderViewFragment"
         android:label="CalenderViewFragment" >
         <action
             android:id="@+id/action_calenderViewFragment_to_budgetEntryFragment"
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/budgetEntryFragment"
-        android:name="com.example.budgetapp.BudgetEntryFragment"
+        android:name="com.example.budgetapp.ui.fragment.BudgetEntryFragment"
         android:label="BudgetEntryFragment" >
         <argument
             android:name="selectedDate"
@@ -29,14 +29,14 @@
     </fragment>
     <fragment
         android:id="@+id/graphsFragment"
-        android:name="com.example.budgetapp.GraphsFragment"
+        android:name="com.example.budgetapp.ui.fragment.GraphsFragment"
         android:label="GraphsFragment" />
     <fragment
         android:id="@+id/reportsFragment"
-        android:name="com.example.budgetapp.ReportsFragment"
+        android:name="com.example.budgetapp.ui.fragment.ReportsFragment"
         android:label="ReportsFragment" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.budgetapp.ProfileFragment"
+        android:name="com.example.budgetapp.ui.fragment.ProfileFragment"
         android:label="ProfileFragment" />
 </navigation>

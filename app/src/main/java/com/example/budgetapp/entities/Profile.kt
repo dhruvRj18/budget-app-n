@@ -10,7 +10,7 @@ data class Profile(
     var id:Int?=null,
     val name: String,
     val email:String,
-    val profileImage:Bitmap?=null,
+    val profileImageFilePath:String,
     val bankName:String,
     val currentBalance:Float,
     val primaryBank:Boolean

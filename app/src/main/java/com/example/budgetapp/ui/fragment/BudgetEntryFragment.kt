@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -25,6 +26,8 @@ class BudgetEntryFragment : Fragment(R.layout.fragment_budget_entry) {
     lateinit var binding: FragmentBudgetEntryBinding
     lateinit var bankName:String
     lateinit var debitOrCredit:String
+    var currentBalance:Float = 0.0f
+    lateinit var remainingBalance:String
 
     val args: CalenderViewFragmentArgs by navArgs()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -36,6 +39,13 @@ class BudgetEntryFragment : Fragment(R.layout.fragment_budget_entry) {
         getProfileData()
 
         setSpinnerForCreditOrDebit()
+        binding.editAmount.addTextChangedListener { it->
+            val enteredAmount = it.toString()
+            val rb = (currentBalance - enteredAmount.toFloat())
+            remainingBalance = rb.toString()
+            binding.remainingBalance.text = remainingBalance
+        }
+
 
         binding.bankSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -69,6 +79,7 @@ class BudgetEntryFragment : Fragment(R.layout.fragment_budget_entry) {
             val purpose = binding.editPurpose.text.toString()
             val cal = Calendar.getInstance()
             val date = cal.timeInMillis.toString()
+
             submitBudgetEntryToDB(bankName,debitOrCredit,amount,purpose,date)
         }
     }
@@ -77,7 +88,6 @@ class BudgetEntryFragment : Fragment(R.layout.fragment_budget_entry) {
         viewModel.insertBudget(Budget(date = date,bankName = bankName,amount = amount.toFloat(),purpose = purpose,creditOrDebit = debitOrCredit))
         Snackbar.make(binding.budgetEntryConstraint,"Entry added",Snackbar.LENGTH_SHORT).show()
     }
-
 
     private fun setSpinnerForCreditOrDebit() {
         val creditDebitArray = ArrayList<String> ()
@@ -93,6 +103,8 @@ class BudgetEntryFragment : Fragment(R.layout.fragment_budget_entry) {
         profileVviewModel.profileLiveData.observe(viewLifecycleOwner) {
             val bankNames = ArrayList<String>()
             bankNames.add(it.bankName)
+            currentBalance  = it.currentBalance
+            binding.remainingBalance.text = it.currentBalance.toString()
             val arrayAdapter =
                 ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, bankNames)
             arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)

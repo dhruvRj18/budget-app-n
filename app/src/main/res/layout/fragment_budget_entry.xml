@@ -20,6 +20,19 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <Spinner
+        android:id="@+id/debit_credit_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/edit_back"
+        android:pointerIcon="arrow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bank_spinner" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/edit_amount"
@@ -34,7 +47,7 @@
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bank_spinner" />
+        app:layout_constraintTop_toBottomOf="@+id/debit_credit_spinner" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/edit_purpose"
@@ -50,19 +63,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_amount" />
 
-    <Spinner
-        android:id="@+id/debit_credit_spinner"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        android:background="@drawable/edit_back"
-        android:pointerIcon="arrow"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_purpose" />
+
 
     <TextView
         android:id="@+id/textView2"
@@ -73,7 +74,7 @@
         android:text="Balance in this account \nafter this entry"
         android:textSize="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/debit_credit_spinner" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_purpose" />
 
     <TextView
         android:id="@+id/remainingBalance"
@@ -84,7 +85,7 @@
         android:text="1512.200"
         android:textSize="20dp"
         app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/debit_credit_spinner" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_purpose" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/submit_budget_entry"

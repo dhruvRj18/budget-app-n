@@ -37,6 +37,10 @@ class ProfileViewModel @Inject constructor(
         profileRepository.insertProfileData(profile )
     }
 
+    fun updateCurrentBalance(revisedBalance:Float) = viewModelScope.launch {
+        profileRepository.updateCurrentBalance(revisedBalance)
+    }
+
 
     sealed class MyEvent{
         object navigateToProfileFragment : MyEvent()

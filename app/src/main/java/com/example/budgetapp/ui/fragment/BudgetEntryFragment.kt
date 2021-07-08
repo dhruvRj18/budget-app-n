@@ -39,13 +39,6 @@ class BudgetEntryFragment : Fragment(R.layout.fragment_budget_entry) {
         getProfileData()
 
         setSpinnerForCreditOrDebit()
-        binding.editAmount.addTextChangedListener { it->
-            val enteredAmount = it.toString()
-            val rb = (currentBalance - enteredAmount.toFloat())
-            remainingBalance = rb.toString()
-            binding.remainingBalance.text = remainingBalance
-        }
-
 
         binding.bankSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -74,18 +67,42 @@ class BudgetEntryFragment : Fragment(R.layout.fragment_budget_entry) {
                 debitOrCredit = "Debit"
             }
         }
+
+        binding.editAmount.addTextChangedListener { it->
+            val enteredAmount = it.toString()
+
+            val rb = if(debitOrCredit.equals("Debit")){
+                    (currentBalance - enteredAmount.toFloat())
+
+            }else{
+                (currentBalance + enteredAmount.toFloat())
+            }
+            remainingBalance = rb.toString()
+            binding.remainingBalance.text = remainingBalance
+
+        }
+
         binding.submitBudgetEntry.setOnClickListener {
             val amount = binding.editAmount.text.toString()
             val purpose = binding.editPurpose.text.toString()
             val cal = Calendar.getInstance()
             val date = cal.timeInMillis.toString()
+            val revisedCurrentBalance = remainingBalance
 
-            submitBudgetEntryToDB(bankName,debitOrCredit,amount,purpose,date)
+            submitBudgetEntryToDB(bankName,debitOrCredit,amount,purpose,date,revisedCurrentBalance)
         }
     }
 
-    private fun submitBudgetEntryToDB(bankName: String, debitOrCredit: String, amount: String, purpose: String, date: String) {
+    private fun submitBudgetEntryToDB(
+        bankName: String,
+        debitOrCredit: String,
+        amount: String,
+        purpose: String,
+        date: String,
+        revisedCurrentBalance: String
+    ) {
         viewModel.insertBudget(Budget(date = date,bankName = bankName,amount = amount.toFloat(),purpose = purpose,creditOrDebit = debitOrCredit))
+        profileVviewModel.updateCurrentBalance(revisedBalance = revisedCurrentBalance.toFloat())
         Snackbar.make(binding.budgetEntryConstraint,"Entry added",Snackbar.LENGTH_SHORT).show()
     }
 

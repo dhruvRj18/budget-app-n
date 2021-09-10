@@ -11,10 +11,12 @@ import androidx.navigation.fragment.navArgs
 import com.example.budgetapp.R
 import com.example.budgetapp.databinding.FragmentBudgetEntryBinding
 import com.example.budgetapp.entities.Budget
+import com.example.budgetapp.ui.adapters.ReportsAdapter
 import com.example.budgetapp.ui.viewModels.BudgetViewModel
 import com.example.budgetapp.ui.viewModels.ProfileViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -85,12 +87,19 @@ class BudgetEntryFragment : Fragment(R.layout.fragment_budget_entry) {
         binding.submitBudgetEntry.setOnClickListener {
             val amount = binding.editAmount.text.toString()
             val purpose = binding.editPurpose.text.toString()
-            val cal = Calendar.getInstance()
-            val date = cal.timeInMillis.toString()
+
+            val date = dateStringToMillis(args.selectedDate!!).toString()
             val revisedCurrentBalance = remainingBalance
 
             submitBudgetEntryToDB(bankName,debitOrCredit,amount,purpose,date,revisedCurrentBalance)
         }
+    }
+
+
+    private fun dateStringToMillis(dateInString:String):Long{
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy")
+        val date = dateFormat.parse(dateInString)
+        return date.time
     }
 
     private fun submitBudgetEntryToDB(

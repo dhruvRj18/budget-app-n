@@ -18,7 +18,7 @@ class CalenderViewFragment : Fragment(R.layout.fragment_calender_view) {
 
         binding.calView.setOnDateChangeListener { view, year, month, dayOfMonth ->
 
-            val selectedDate = "${dayOfMonth} / ${month + 1} / ${year}"
+            val selectedDate = "${dayOfMonth}/${month + 1}/${year}"
             val action =
                 CalenderViewFragmentDirections.actionCalenderViewFragmentToBudgetEntryFragment()
                     .setSelectedDate(selectedDate)

@@ -8,4 +8,6 @@ class BudgetRepository @Inject constructor(
     val budgetDao: BudgetDao
 ) {
     suspend fun insertBudget(budget: Budget)= budgetDao.insertBudget(budget)
+
+    suspend fun getAllBudgetEntries() = budgetDao.getAllData()
 }

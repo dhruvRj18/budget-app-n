@@ -12,7 +12,7 @@ object UtilityFunctions {
         return date.time
     }
     fun dateMillisToString(dateInMillis:Long):String{
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm:ss a")
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy")
         val cal = Calendar.getInstance()
         cal.timeInMillis = dateInMillis
         return dateFormat.format(cal.time)

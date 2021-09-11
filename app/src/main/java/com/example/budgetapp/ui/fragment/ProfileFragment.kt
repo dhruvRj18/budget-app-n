@@ -19,6 +19,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.budgetapp.InternalStoragePhoto
 import com.example.budgetapp.R
@@ -49,9 +50,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         val isSavedSuccessfully =
             saveImageToInternalStorage("profile", bitmap)
         if (isSavedSuccessfully) {
-            Toast.makeText(requireContext(), "Photo saved", Toast.LENGTH_SHORT).show()
+            Log.d("TAG", "Profile Fragment: Photo saved")
         } else {
-            Toast.makeText(requireContext(), "Failed to save photo", Toast.LENGTH_SHORT).show()
+            Log.d("TAG", "Profile Fragment:Failed to save photo")
         }
     }
 
@@ -74,6 +75,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     binding.bankName.setText(profile.bankName)
                     binding.currentBalance.setText(profile.currentBalance.toString())
                     binding.materialCheckBox.isChecked = profile.primaryBank
+                    binding.profileName.setText(profile.name)
+                    binding.profileEmail.setText(profile.email)
                 }
             } else {
                 Toast.makeText(requireContext(), "Complete PRofile", Toast.LENGTH_SHORT).show()
@@ -87,7 +90,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
 
         binding.submitProfile.setOnClickListener {
-
             submitData(
                 binding.profileName.text.toString(),
                 binding.profileEmail.text.toString(),
@@ -97,7 +99,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             )
         }
     }
-
 
     private fun submitData(
         name: String,
@@ -115,8 +116,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 currentBalance = currentBalance.toFloat(),
                 primaryBank = checked
             )
-        )
 
+        )
+        findNavController().navigate(R.id.action_profileFragment_to_calenderViewFragment2)
     }
 
     private fun saveImageToInternalStorage(fileName: String, bitmap: Bitmap): Boolean {

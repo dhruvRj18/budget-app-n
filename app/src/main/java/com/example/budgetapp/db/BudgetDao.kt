@@ -1,10 +1,7 @@
 package com.example.budgetapp.db
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.example.budgetapp.entities.Budget
 
 @Dao
@@ -14,17 +11,20 @@ interface BudgetDao {
     suspend fun insertBudget(budget: Budget)
 
     @Query("SELECT * FROM budget ORDER BY id ASC")
-    suspend fun getAllData(): List<Budget>
+     fun getAllData(): LiveData<List<Budget>>
 
     @Query("SELECT SUM(amount) FROM budget WHERE creditOrDebit = 'Debit'")
-    suspend fun getTotalSpending():Float
+     fun getTotalSpending():LiveData<Float>
 
     @Query("SELECT SUM(amount) FROM budget WHERE creditOrDebit = 'Credit'")
-    suspend fun getTotalCredit():Float
+     fun getTotalCredit():LiveData<Float>
 
     @Query("SELECT SUM(amount) FROM budget")
-    suspend fun getTotalTransactionValue():Float
+     fun getTotalTransactionValue():LiveData<Float>
 
     @Query("SELECT * FROM budget WHERE date BETWEEN :startDate AND :endDate")
     suspend fun getReportsBetweenDates(startDate:Long, endDate:Long):List<Budget>
+
+    @Delete
+    suspend fun deleteEntry(budget: Budget)
 }

@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.budgetapp.R
 import com.example.budgetapp.databinding.FragmentBudgetEntryBinding
@@ -37,8 +38,7 @@ class BudgetEntryFragment : Fragment(R.layout.fragment_budget_entry) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentBudgetEntryBinding.bind(view)
         activity?.title = "Enter Budget for: ${args.selectedDate}"
-        Snackbar.make(binding.budgetEntryConstraint, "" + args.selectedDate, Snackbar.LENGTH_SHORT)
-            .show()
+
         getProfileData()
 
         setSpinnerForCreditOrDebit()
@@ -106,6 +106,7 @@ class BudgetEntryFragment : Fragment(R.layout.fragment_budget_entry) {
         viewModel.insertBudget(Budget(date = date,bankName = bankName,amount = amount.toFloat(),purpose = purpose,creditOrDebit = debitOrCredit))
         profileVviewModel.updateCurrentBalance(revisedBalance = revisedCurrentBalance.toFloat())
         Snackbar.make(binding.budgetEntryConstraint,"Entry added",Snackbar.LENGTH_SHORT).show()
+        findNavController().navigate(R.id.action_budgetEntryFragment_to_calenderViewFragment2)
     }
 
     private fun setSpinnerForCreditOrDebit() {

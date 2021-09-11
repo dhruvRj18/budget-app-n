@@ -9,13 +9,19 @@ class BudgetRepository @Inject constructor(
 ) {
     suspend fun insertBudget(budget: Budget) = budgetDao.insertBudget(budget)
 
-    suspend fun getAllBudgetEntries() = budgetDao.getAllData()
+     fun getAllBudgetEntries() = budgetDao.getAllData()
 
     suspend fun getBudgetEntriesBetweenDates(startDate: Long, endDate: Long) =
         budgetDao.getReportsBetweenDates(
-            startDate,endDate
+            startDate, endDate
         )
 
-   // getTotalSpending()
+     fun getTotalSpending() = budgetDao.getTotalSpending()
+
+     fun getTotalCredit() = budgetDao.getTotalCredit()
+
+     fun getTotalTransaction() = budgetDao.getTotalTransactionValue()
+
+    suspend fun deleteEntry(budget: Budget) = budgetDao.deleteEntry(budget)
 
 }

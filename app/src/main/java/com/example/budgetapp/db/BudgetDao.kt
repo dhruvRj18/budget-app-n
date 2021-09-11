@@ -13,11 +13,12 @@ interface BudgetDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertBudget(budget: Budget)
 
-    @Query("SELECT * FROM budget ORDER BY id DESC")
+    @Query("SELECT * FROM budget ORDER BY id ASC")
     suspend fun getAllData(): List<Budget>
 
     @Query("SELECT SUM(amount) FROM budget WHERE creditOrDebit = 'Debit'")
     suspend fun getTotalSpending():Float
+
     @Query("SELECT SUM(amount) FROM budget WHERE creditOrDebit = 'Credit'")
     suspend fun getTotalCredit():Float
 
@@ -25,6 +26,5 @@ interface BudgetDao {
     suspend fun getTotalTransactionValue():Float
 
     @Query("SELECT * FROM budget WHERE date BETWEEN :startDate AND :endDate")
-    suspend fun getReportsBetweenDates(startDate:String, endDate:String):List<Budget>
-
+    suspend fun getReportsBetweenDates(startDate:Long, endDate:Long):List<Budget>
 }

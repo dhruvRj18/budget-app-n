@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.budgetapp.databinding.ItemBudgetBinding
 import com.example.budgetapp.entities.Budget
+import com.example.budgetapp.util.UtilityFunctions.dateMillisToString
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -46,10 +47,5 @@ class ReportsAdapter : RecyclerView.Adapter<ReportsAdapter.MyViewHolder>() {
         return differ.currentList.size
     }
 
-    private fun dateMillisToString(dateInMillis:Long):String{
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm:ss a")
-        val cal = Calendar.getInstance()
-        cal.timeInMillis = dateInMillis
-        return dateFormat.format(cal.time)
-    }
+
 }

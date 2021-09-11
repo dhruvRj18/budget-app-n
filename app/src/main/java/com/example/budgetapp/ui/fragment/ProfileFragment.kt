@@ -1,12 +1,13 @@
 package com.example.budgetapp.ui.fragment
 
-import android.app.Activity
+
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import android.content.ContextWrapper
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
-import android.media.Image
+
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -14,10 +15,11 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.result.launch
+
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.budgetapp.InternalStoragePhoto
 import com.example.budgetapp.R
@@ -28,8 +30,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
-import java.util.*
+
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
@@ -42,13 +46,13 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val source = ImageDecoder.createSource(requireContext().contentResolver!!, filepath)
             bitmap = ImageDecoder.decodeBitmap(source)
-        } 
+        }
         val isSavedSuccessfully =
-            saveImageToInternalStorage("${filepath.lastPathSegment}.jpg", bitmap)
+            saveImageToInternalStorage("profile", bitmap)
         if (isSavedSuccessfully) {
-            Toast.makeText(requireContext(), "Photo saved", Toast.LENGTH_SHORT).show()
+            Log.d("TAG", "Profile Fragment: Photo saved")
         } else {
-            Toast.makeText(requireContext(), "Failed to save photo", Toast.LENGTH_SHORT).show()
+            Log.d("TAG", "Profile Fragment:Failed to save photo")
         }
     }
 
@@ -71,6 +75,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     binding.bankName.setText(profile.bankName)
                     binding.currentBalance.setText(profile.currentBalance.toString())
                     binding.materialCheckBox.isChecked = profile.primaryBank
+                    binding.profileName.setText(profile.name)
+                    binding.profileEmail.setText(profile.email)
                 }
             } else {
                 Toast.makeText(requireContext(), "Complete PRofile", Toast.LENGTH_SHORT).show()
@@ -84,7 +90,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
 
         binding.submitProfile.setOnClickListener {
-
             submitData(
                 binding.profileName.text.toString(),
                 binding.profileEmail.text.toString(),
@@ -94,7 +99,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             )
         }
     }
-
 
     private fun submitData(
         name: String,
@@ -112,12 +116,19 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 currentBalance = currentBalance.toFloat(),
                 primaryBank = checked
             )
-        )
 
+        )
+        findNavController().navigate(R.id.action_profileFragment_to_calenderViewFragment2)
     }
 
     private fun saveImageToInternalStorage(fileName: String, bitmap: Bitmap): Boolean {
+
+        val directory = ContextWrapper(requireContext()).getDir("imageDir",Context.MODE_PRIVATE)
+        val mypath = File(directory,"$fileName.jpg")
+        var fos:FileOutputStream? = null
         return try {
+
+
             requireContext().openFileOutput("$fileName.jpg", MODE_PRIVATE).use { outputStream ->
                 if (bitmap.compress(Bitmap.CompressFormat.JPEG, 95, outputStream)) {
                     throw IOException("Couldn't save bitmap")

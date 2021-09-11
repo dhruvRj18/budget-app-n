@@ -14,6 +14,6 @@ data class Budget(
     val bankName:String,
     val amount:Float,
     val purpose:String,
-    val creditOrDebit:Boolean
+    val creditOrDebit:String
 ) {
 }

@@ -2,6 +2,8 @@ package com.example.budgetapp.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.budgetapp.db.BudgetDatabase
 import com.example.budgetapp.util.Constants.BUDGET_DATABASE_NAME
 import dagger.Module
@@ -22,7 +24,9 @@ object AppModule {
     ) = Room.databaseBuilder(
         context,
         BudgetDatabase::class.java,
-        BUDGET_DATABASE_NAME).build()
+        BUDGET_DATABASE_NAME)
+        .fallbackToDestructiveMigration()
+        .build()
 
     @Singleton
     @Provides

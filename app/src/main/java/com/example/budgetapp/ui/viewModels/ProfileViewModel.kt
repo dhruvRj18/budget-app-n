@@ -19,15 +19,15 @@ class ProfileViewModel @Inject constructor(
     val profileRepository: ProfileRepository
 ) : ViewModel() {
 
-    var profileLiveData:MutableLiveData<Profile> = MutableLiveData<Profile>()
-
+    val _profileLiveData:MutableLiveData<Profile> = MutableLiveData<Profile>()
+    val profileLiveData:LiveData<Profile> = _profileLiveData
     private val eventChanel = kotlinx.coroutines.channels.Channel<MyEvent>()
     val event = eventChanel.receiveAsFlow()
 
     fun getProfile() = viewModelScope.launch {
         val profileData = profileRepository.getProfile()
         if (profileData.size>0){
-            profileLiveData.postValue(profileData[0])
+            _profileLiveData.postValue(profileData[0])
         }else{
             eventChanel.send(MyEvent.navigateToProfileFragment)
         }
@@ -35,6 +35,10 @@ class ProfileViewModel @Inject constructor(
 
     fun insertProfileData(profile: Profile) = viewModelScope.launch {
         profileRepository.insertProfileData(profile )
+    }
+
+    fun updateCurrentBalance(revisedBalance:Float) = viewModelScope.launch {
+        profileRepository.updateCurrentBalance(revisedBalance)
     }
 
 

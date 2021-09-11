@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Android Projects/projects/My_Apps/Kotlin/BudgetApp/app/src/main/res/layout/fragment_profile.xml" value="0.22" />
+        <entry key="..\:/Android Projects/projects/My_Apps/Kotlin/BudgetApp/app/src/main/res/layout/fragment_reports.xml" value="0.18" />
+        <entry key="..\:/Android Projects/projects/My_Apps/Kotlin/BudgetApp/app/src/main/res/layout/item_budget.xml" value="0.18" />
+        <entry key="..\:/Android Projects/projects/My_Apps/Kotlin/BudgetApp/app/src/main/res/layout/statastics_bottom_sheet.xml" value="0.19" />
+        <entry key="..\:/Android Projects/projects/My_Apps/Kotlin/BudgetApp/app/src/main/res/menu/bottom_nav.xml" value="0.1574074074074074" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

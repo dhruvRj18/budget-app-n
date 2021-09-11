@@ -9,8 +9,8 @@
         android:id="@+id/reportsFragment"
         android:icon="@drawable/ic_file"
         android:title="See Reports"/>
-    <item
+    <!--<item
         android:id="@+id/graphsFragment"
         android:icon="@drawable/ic_graph"
-        android:title="Spending Graphs"/>
+        android:title="Spending Graphs"/>-->
 </menu>

@@ -9,6 +9,7 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.budgetapp.R
 import com.example.budgetapp.databinding.ItemBudgetBinding
 import com.example.budgetapp.entities.Budget
@@ -46,6 +47,7 @@ class ReportsAdapter : RecyclerView.Adapter<ReportsAdapter.MyViewHolder>() {
                 itemBudgetBinding.budgetItemPerpose.tooltipText = purpose
 
                 if (creditOrDebit.equals("Credit")){
+
                     itemBudgetBinding.budgetItemType.setImageResource(R.drawable.ic_credit)
                 }else{
                     itemBudgetBinding.budgetItemType.setImageResource(R.drawable.ic_debit)

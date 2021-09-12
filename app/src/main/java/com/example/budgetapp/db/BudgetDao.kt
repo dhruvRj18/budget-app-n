@@ -25,6 +25,8 @@ interface BudgetDao {
     @Query("SELECT * FROM budget WHERE date BETWEEN :startDate AND :endDate")
     suspend fun getReportsBetweenDates(startDate:Long, endDate:Long):List<Budget>
 
+    @Query("SELECT SUM(amount) FROM budget WHERE date = :date AND creditOrDebit = 'Debit'")
+    suspend fun getYesterDaySpending(date:Long):Float?
     @Delete
     suspend fun deleteEntry(budget: Budget)
 }

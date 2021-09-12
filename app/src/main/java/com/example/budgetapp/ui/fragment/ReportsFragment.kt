@@ -16,6 +16,7 @@ import com.example.budgetapp.ui.adapters.ReportsAdapter
 import com.example.budgetapp.ui.viewModels.BudgetViewModel
 import com.example.budgetapp.util.UtilityFunctions
 import com.example.budgetapp.util.UtilityFunctions.dateMillisToString
+import com.example.budgetapp.util.UtilityFunctions.getEndDate
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
@@ -126,11 +127,7 @@ class ReportsFragment : Fragment(R.layout.fragment_reports) {
 
     }
 
-    private fun getEndDate(daysToCount: Int): String {
-        val cal = Calendar.getInstance()
-        cal.add(Calendar.DAY_OF_YEAR, -daysToCount)
-        return dateMillisToString(cal.timeInMillis)
-    }
+
 
     private fun setStartDate(): String {
         val dateInMillis = Calendar.getInstance().timeInMillis

@@ -1,5 +1,6 @@
 package com.example.budgetapp.ui.viewModels
 
+import android.util.Log
 import android.widget.Toast
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
@@ -23,19 +24,25 @@ class BudgetViewModel @Inject constructor(
 
     val allBudgetEntries: LiveData<List<Budget>> = budgetRepository.getAllBudgetEntries()
 
-
-
     var _dateRangeBudgetEntries:MutableLiveData<List<Budget>> = MutableLiveData()
     val dateRangeBudgetEntries:LiveData<List<Budget>> = _dateRangeBudgetEntries
 
-
     val totalDebit: LiveData<Float> = budgetRepository.getTotalSpending()
-
-
     val totalCredit:LiveData<Float> = budgetRepository.getTotalCredit()
-
-
     val totalTransaction:LiveData<Float> = budgetRepository.getTotalTransaction()
+
+    var _yesterDaysSpending:MutableLiveData<Float> = MutableLiveData()
+    val yesterDaysSpending:LiveData<Float> = _yesterDaysSpending
+
+    fun yesterDaysSpending(yesterDay:Long) = viewModelScope.launch {
+        val response = budgetRepository.getYesterDaySpending(yesterDay)
+        response?.let {
+            Log.d("TAG", "yesterDaysSpending: $response")
+            _yesterDaysSpending.postValue(response)
+        }
+
+
+    }
 
     fun deleteEntry(budget: Budget) = viewModelScope.launch {
         budgetRepository.deleteEntry(budget)

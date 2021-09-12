@@ -3,6 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Android Projects/projects/My_Apps/Kotlin/BudgetApp/app/src/main/res/drawable/edit_back.xml" value="0.11197916666666667" />
+        <entry key="..\:/Android Projects/projects/My_Apps/Kotlin/BudgetApp/app/src/main/res/drawable/ic_credit.xml" value="0.19722222222222222" />
+        <entry key="..\:/Android Projects/projects/My_Apps/Kotlin/BudgetApp/app/src/main/res/layout/fragment_budget_entry.xml" value="0.1" />
+        <entry key="..\:/Android Projects/projects/My_Apps/Kotlin/BudgetApp/app/src/main/res/layout/fragment_graphs.xml" value="0.1" />
         <entry key="..\:/Android Projects/projects/My_Apps/Kotlin/BudgetApp/app/src/main/res/layout/fragment_profile.xml" value="0.22" />
         <entry key="..\:/Android Projects/projects/My_Apps/Kotlin/BudgetApp/app/src/main/res/layout/fragment_reports.xml" value="0.18" />
         <entry key="..\:/Android Projects/projects/My_Apps/Kotlin/BudgetApp/app/src/main/res/layout/item_budget.xml" value="0.18" />

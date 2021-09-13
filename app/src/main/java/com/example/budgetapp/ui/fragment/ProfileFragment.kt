@@ -60,9 +60,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentProfileBinding.bind(view)
         activity?.title = "My Profile"
-        profileViewModel.getProfile()
+
         profileViewModel.profileLiveData.observe(viewLifecycleOwner) { profile ->
-            if (profile != null) {
+            if (profile.size >=1) {
                 viewLifecycleOwner.lifecycleScope.launch {
                     val listofImage = loadImageFromInternalStorage()
                     Log.d("imageList", "$listofImage")
@@ -72,11 +72,11 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                                 .into(binding.profileImage)
                         }
                     }
-                    binding.bankName.setText(profile.bankName)
-                    binding.currentBalance.setText(profile.currentBalance.toString())
-                    binding.materialCheckBox.isChecked = profile.primaryBank
-                    binding.profileName.setText(profile.name)
-                    binding.profileEmail.setText(profile.email)
+                    binding.bankName.setText(profile[0].bankName)
+                    binding.currentBalance.setText(profile[0].currentBalance.toString())
+                    binding.materialCheckBox.isChecked = profile[0].primaryBank
+                    binding.profileName.setText(profile[0].name)
+                    binding.profileEmail.setText(profile[0].email)
                 }
             } else {
                 Toast.makeText(requireContext(), "Complete PRofile", Toast.LENGTH_SHORT).show()
@@ -124,8 +124,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private fun saveImageToInternalStorage(fileName: String, bitmap: Bitmap): Boolean {
 
         val directory = ContextWrapper(requireContext()).getDir("imageDir",Context.MODE_PRIVATE)
-        val mypath = File(directory,"$fileName.jpg")
-        var fos:FileOutputStream? = null
+
         return try {
 
 

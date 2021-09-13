@@ -46,16 +46,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     val profileViewModel: ProfileViewModel by viewModels()
     val budgetViewModel : BudgetViewModel by viewModels()
-    private val cal = Calendar.getInstance()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        checkForProfileData()
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         val view = binding.root
         setContentView(view)
-
-        checkForProfileData()
         getYesterDaysBudget()
 
         val navHostFragment =
@@ -113,9 +112,13 @@ class MainActivity : AppCompatActivity() {
     private fun checkForProfileData() {
         // if no profile data -> complete profile first
 
-        profileViewModel.getProfile()
+        profileViewModel.profileLiveData.observe(this){
+            if (it.size <1){
+                navController.navigate(R.id.action_global_profileFragment)
+            }
+        }
 
-        this.lifecycleScope.launchWhenStarted {
+        /*this.lifecycleScope.launchWhenStarted {
             profileViewModel.event.collect {event ->
                 when(event){
                     is ProfileViewModel.MyEvent.navigateToProfileFragment -> {
@@ -124,7 +127,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
             }
-        }
+        }*/
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

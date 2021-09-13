@@ -119,12 +119,12 @@ class BudgetEntryFragment : Fragment(R.layout.fragment_budget_entry) {
     }
 
     private fun getProfileData() {
-        profileVviewModel.getProfile()
+
         profileVviewModel.profileLiveData.observe(viewLifecycleOwner) {
             val bankNames = ArrayList<String>()
-            bankNames.add(it.bankName)
-            currentBalance  = it.currentBalance
-            binding.remainingBalance.text = it.currentBalance.toString()
+            bankNames.add(it[0].bankName)
+            currentBalance  = it[0].currentBalance
+            binding.remainingBalance.text = it[0].currentBalance.toString()
             val arrayAdapter =
                 ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, bankNames)
             arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)

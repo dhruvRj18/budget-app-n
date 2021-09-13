@@ -1,6 +1,7 @@
 package com.example.budgetapp.ui.viewModels
 
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,19 +20,8 @@ class ProfileViewModel @Inject constructor(
     val profileRepository: ProfileRepository
 ) : ViewModel() {
 
-    val _profileLiveData:MutableLiveData<Profile> = MutableLiveData<Profile>()
-    val profileLiveData:LiveData<Profile> = _profileLiveData
-    private val eventChanel = kotlinx.coroutines.channels.Channel<MyEvent>()
-    val event = eventChanel.receiveAsFlow()
 
-    fun getProfile() = viewModelScope.launch {
-        val profileData = profileRepository.getProfile()
-        if (profileData.size>0){
-            _profileLiveData.postValue(profileData[0])
-        }else{
-            eventChanel.send(MyEvent.navigateToProfileFragment)
-        }
-    }
+    val profileLiveData:LiveData<List<Profile>> = profileRepository.getProfile()
 
     fun insertProfileData(profile: Profile) = viewModelScope.launch {
         profileRepository.insertProfileData(profile )
@@ -39,10 +29,5 @@ class ProfileViewModel @Inject constructor(
 
     fun updateCurrentBalance(revisedBalance:Float) = viewModelScope.launch {
         profileRepository.updateCurrentBalance(revisedBalance)
-    }
-
-
-    sealed class MyEvent{
-        object navigateToProfileFragment : MyEvent()
     }
 }

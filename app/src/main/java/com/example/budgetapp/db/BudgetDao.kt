@@ -29,4 +29,6 @@ interface BudgetDao {
     suspend fun getYesterDaySpending(date:Long):Float?
     @Delete
     suspend fun deleteEntry(budget: Budget)
+
+    //make function using total credit and total spending to calculate latest currentBalance
 }

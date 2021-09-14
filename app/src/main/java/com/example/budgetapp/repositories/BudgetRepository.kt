@@ -16,6 +16,9 @@ class BudgetRepository @Inject constructor(
             startDate, endDate
         )
 
+    suspend fun updateBudget(amount:Float,purpose:String, id:Int) = budgetDao.updateBudget(amount, purpose, id)
+
+
      fun getTotalSpending() = budgetDao.getTotalSpending()
 
      fun getTotalCredit() = budgetDao.getTotalCredit()

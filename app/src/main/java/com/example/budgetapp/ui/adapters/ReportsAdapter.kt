@@ -17,10 +17,21 @@ import com.example.budgetapp.util.UtilityFunctions.dateMillisToString
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ReportsAdapter : RecyclerView.Adapter<ReportsAdapter.MyViewHolder>() {
+class ReportsAdapter(
+    val listener:MyOnclickListener
+) : RecyclerView.Adapter<ReportsAdapter.MyViewHolder>() {
 
     inner class MyViewHolder(val itemBudgetBinding: ItemBudgetBinding) :
-        RecyclerView.ViewHolder(itemBudgetBinding.root){}
+        RecyclerView.ViewHolder(itemBudgetBinding.root){
+            init {
+                itemBudgetBinding.root.setOnLongClickListener {
+                    val position = adapterPosition
+                    listener.OnClick(position)
+                    true
+                }
+
+            }
+        }
     private val differCallback = object : DiffUtil.ItemCallback<Budget>(){
         override fun areItemsTheSame(oldItem: Budget, newItem: Budget): Boolean {
             return oldItem.id == newItem.id
@@ -32,7 +43,6 @@ class ReportsAdapter : RecyclerView.Adapter<ReportsAdapter.MyViewHolder>() {
     }
     val differ = AsyncListDiffer(this,differCallback)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-
         return MyViewHolder(
             ItemBudgetBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         )
@@ -56,9 +66,11 @@ class ReportsAdapter : RecyclerView.Adapter<ReportsAdapter.MyViewHolder>() {
             }
         }
     }
+
+    interface MyOnclickListener{
+         fun OnClick(position: Int)
+    }
     override fun getItemCount(): Int {
         return differ.currentList.size
     }
-
-
 }

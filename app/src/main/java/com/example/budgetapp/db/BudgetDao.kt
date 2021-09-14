@@ -10,6 +10,9 @@ interface BudgetDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertBudget(budget: Budget)
 
+    @Query("UPDATE budget SET amount = :amount, purpose = :purpose WHERE id = :id")
+    suspend fun updateBudget(amount:Float,purpose:String,id:Int)
+
     @Query("SELECT * FROM budget ORDER BY id ASC")
      fun getAllData(): LiveData<List<Budget>>
 

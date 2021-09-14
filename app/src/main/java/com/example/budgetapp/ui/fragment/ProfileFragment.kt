@@ -4,6 +4,7 @@ package com.example.budgetapp.ui.fragment
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.ContextWrapper
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
@@ -26,7 +27,13 @@ import com.example.budgetapp.InternalStoragePhoto
 import com.example.budgetapp.R
 import com.example.budgetapp.databinding.FragmentProfileBinding
 import com.example.budgetapp.entities.Profile
+import com.example.budgetapp.ui.viewModels.BudgetViewModel
 import com.example.budgetapp.ui.viewModels.ProfileViewModel
+import com.example.budgetapp.util.Constants.PREFERENCE_DATE
+import com.example.budgetapp.util.Constants.PREFERENCE_KEY
+import com.example.budgetapp.util.Constants.PREFERENCE_NAME
+import com.example.budgetapp.util.UtilityFunctions
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,14 +41,18 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.util.*
 
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
     val profileViewModel: ProfileViewModel by viewModels()
+    val budgetViewModel: BudgetViewModel by viewModels()
     lateinit var bitmap: Bitmap
     lateinit var filepath: Uri
     lateinit var binding: FragmentProfileBinding
+    lateinit var myPref : SharedPreferences
+
     val takePhoto = registerForActivityResult(ActivityResultContracts.GetContent()) { result ->
         filepath = result
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -61,6 +72,14 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentProfileBinding.bind(view)
         activity?.title = "My Profile"
+        myPref = requireContext().getSharedPreferences(PREFERENCE_NAME, MODE_PRIVATE)
+        binding.updateCurrentBalance.setOnClickListener {
+            if (!myPref.contains(PREFERENCE_KEY)){
+                updateCurrentBalance()
+            }else{
+                Snackbar.make(binding.profileConstrain,"Balance Up to Date. Try again tomorrow.",Snackbar.LENGTH_SHORT).show()
+            }
+        }
 
         profileViewModel.profileLiveData.observe(viewLifecycleOwner, object: androidx.lifecycle.Observer<List<Profile>>{
             override fun onChanged(profile: List<Profile>?) {
@@ -103,6 +122,48 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 binding.materialCheckBox.isChecked
             )
         }
+    }
+
+    private fun updateCurrentBalance() {
+        val editor = myPref.edit()
+        editor.putString(PREFERENCE_KEY,"Updated")
+        editor.putLong(PREFERENCE_DATE,Calendar.getInstance().timeInMillis)
+        editor.apply()
+
+        val yesterDayinString = UtilityFunctions.getEndDate(1)
+        val yesterDay = UtilityFunctions.dateStringToMillis(yesterDayinString)
+
+        budgetViewModel.yesterDaysBudget(yesterDay)
+        budgetViewModel.yesterDaysBudget.observe(viewLifecycleOwner){yesterDayBudget ->
+            var yesterdaySpending:Float = 0f
+            var yesterdayCredit:Float = 0f
+            yesterDayBudget?.let {
+                for (i in it){
+                    if (i.creditOrDebit.equals("Debit")){
+                        yesterdaySpending = yesterdaySpending +  i.amount
+                    }else if(i.creditOrDebit.equals("Credit")){
+                        yesterdayCredit = yesterdayCredit + i.amount
+                    }
+                }
+                val yesterDayGrossValue = yesterdayCredit + (-1*yesterdaySpending)
+                Log.d("TAG", "getYesterDaysBudget: $yesterDayGrossValue \n $yesterdayCredit \n ${-1*yesterdaySpending}")
+                uploadNewCurrentBalance(yesterDayGrossValue)
+            }
+        }
+    }
+
+    private fun uploadNewCurrentBalance(yesterDayGrossValue: Float) {
+        Log.d("TAG", "yesterDay gross: $yesterDayGrossValue")
+        profileViewModel.profileLiveData.observe(viewLifecycleOwner,object : androidx.lifecycle.Observer<List<Profile>>{
+            override fun onChanged(t: List<Profile>?) {
+                val currentBal = t!![0].currentBalance
+                val newCurrentBal = currentBal + yesterDayGrossValue
+                Log.d("TAG", "onChanged: newBal $newCurrentBal")
+                profileViewModel.updateCurrentBalance(newCurrentBal)
+                profileViewModel.profileLiveData.removeObserver(this)
+                findNavController().navigate(R.id.action_global_profileFragment)
+            }
+        })
     }
 
     private fun submitData(

@@ -33,6 +33,8 @@ import com.example.budgetapp.ui.viewModels.ProfileViewModel
 import com.example.budgetapp.util.Constants
 import com.example.budgetapp.util.Constants.CHANNEL_ID
 import com.example.budgetapp.util.Constants.NOTIFICATION_ID
+import com.example.budgetapp.util.Constants.PREFERENCE_DATE
+import com.example.budgetapp.util.Constants.PREFERENCE_NAME
 import com.example.budgetapp.util.UtilityFunctions.dateStringToMillis
 import com.example.budgetapp.util.UtilityFunctions.getEndDate
 import com.example.budgetapp.workmanager.NotifyUserWorker
@@ -48,10 +50,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     val profileViewModel: ProfileViewModel by viewModels()
-    val budgetViewModel : BudgetViewModel by viewModels()
+    val budgetViewModel: BudgetViewModel by viewModels()
     val yesterDayinString = getEndDate(1)
     val yesterDay = dateStringToMillis(yesterDayinString)
     val currentDate = Calendar.getInstance()
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,6 +64,7 @@ class MainActivity : AppCompatActivity() {
 
         val view = binding.root
         setContentView(view)
+        clearSharedPrefOfYesterDay()
         getYesterDaysBudget()
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -70,75 +74,59 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun updateCurrentBalance() {
-
-        budgetViewModel.yesterDaysBudget(yesterDay)
-        budgetViewModel.yesterDaysBudget.observe(this){yesterDayBudget ->
-            var yesterdaySpending:Float = 0f
-            var yesterdayCredit:Float = 0f
-            yesterDayBudget?.let {
-                for (i in it){
-                    if (i.creditOrDebit.equals("Debit")){
-                        yesterdaySpending = yesterdaySpending +  i.amount
-                    }else if(i.creditOrDebit.equals("Credit")){
-                        yesterdayCredit = yesterdayCredit + i.amount
-                    }
-                }
-                val yesterDayGrossValue = yesterdayCredit + (-1*yesterdaySpending)
-                Log.d("TAG", "getYesterDaysBudget: $yesterDayGrossValue \n $yesterdayCredit \n ${-1*yesterdaySpending}")
-                uploadNewCurrentBalance(yesterDayGrossValue)
+    private fun clearSharedPrefOfYesterDay() {
+        val myPref = this.getSharedPreferences(PREFERENCE_NAME, MODE_PRIVATE)
+        val today = Calendar.getInstance().timeInMillis
+        if (myPref.contains(PREFERENCE_DATE)) {
+            Log.d("TAG", "Today:${Calendar.getInstance().timeInMillis} \n" +
+                    "PREF date: ${myPref.getLong(PREFERENCE_DATE,0L)} ")
+            if (today > myPref.getLong(PREFERENCE_DATE, 0L)) {
+               val ed =  myPref.edit()
+                ed.clear()
+                ed.commit()
             }
         }
     }
 
-    private fun uploadNewCurrentBalance(yesterDayGrossValue: Float) {
-        profileViewModel.profileLiveData.observe(this,object : androidx.lifecycle.Observer<List<Profile>>{
-            override fun onChanged(t: List<Profile>?) {
-                val currentBal = t!![0].currentBalance
-                val newCurrentBal = currentBal + yesterDayGrossValue
-                profileViewModel.updateCurrentBalance(newCurrentBal)
-                profileViewModel.profileLiveData.removeObserver(this)
-            }
-        })
-    }
 
     private fun getYesterDaysBudget() {
 
         budgetViewModel.yesterDaysSpending(yesterDay)
 
 
-        budgetViewModel.yesterDaysSpending.observe(this){yesterDaySpending ->
-           yesterDaySpending?.let {
-               val dueDate = Calendar.getInstance()
-               //setting execution around 8 am
-               dueDate.set(Calendar.HOUR_OF_DAY, 8)
-               dueDate.set(Calendar.MINUTE, 0)
-               dueDate.set(Calendar.SECOND,0)
+        budgetViewModel.yesterDaysSpending.observe(this) { yesterDaySpending ->
+            yesterDaySpending?.let {
+                val dueDate = Calendar.getInstance()
+                //setting execution around 8 am
+                dueDate.set(Calendar.HOUR_OF_DAY, 8)
+                dueDate.set(Calendar.MINUTE, 0)
+                dueDate.set(Calendar.SECOND, 0)
 
-               val timeDiff = dueDate.timeInMillis - currentDate.timeInMillis
+                val timeDiff = dueDate.timeInMillis - currentDate.timeInMillis
 
-               val dailyWorkRequest = OneTimeWorkRequestBuilder<NotifyUserWorker>()
-                   .setInitialDelay(timeDiff,TimeUnit.MILLISECONDS)
-                   .setInputData(workDataOf("yesterDaySpending" to yesterDaySpending))
-                   .addTag("Notification ")
-                   .build()
-               WorkManager.getInstance(applicationContext)
-                   .enqueue(dailyWorkRequest)
+                val dailyWorkRequest = OneTimeWorkRequestBuilder<NotifyUserWorker>()
+                    .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
+                    .setInputData(workDataOf("yesterDaySpending" to yesterDaySpending))
+                    .addTag("Notification ")
+                    .build()
+                WorkManager.getInstance(applicationContext)
+                    .enqueue(dailyWorkRequest)
 
 
-           }
+            }
         }
     }
 
-    private fun createNotificationChannel(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = "BudgetApp"
             val descriptionText = "Your yesterday's spending"
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(CHANNEL_ID,name,importance).apply{
+            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
                 description = descriptionText
             }
-            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
     }
@@ -146,22 +134,11 @@ class MainActivity : AppCompatActivity() {
     private fun checkForProfileData() {
         // if no profile data -> complete profile first
 
-        profileViewModel.profileLiveData.observe(this){
-            if (it.size <1){
+        profileViewModel.profileLiveData.observe(this) {
+            if (it.size < 1) {
                 navController.navigate(R.id.action_global_profileFragment)
             }
         }
-
-        /*this.lifecycleScope.launchWhenStarted {
-            profileViewModel.event.collect {event ->
-                when(event){
-                    is ProfileViewModel.MyEvent.navigateToProfileFragment -> {
-                        navController.navigate(R.id.action_global_profileFragment)
-                    }
-                }
-
-            }
-        }*/
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

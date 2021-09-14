@@ -28,10 +28,10 @@ class BudgetEntryFragment : Fragment(R.layout.fragment_budget_entry) {
     private val viewModel: BudgetViewModel by viewModels()
     private val profileVviewModel: ProfileViewModel by viewModels()
     lateinit var binding: FragmentBudgetEntryBinding
-    lateinit var bankName:String
-    lateinit var debitOrCredit:String
-    var currentBalance:Float = 0.0f
-    lateinit var remainingBalance:String
+    lateinit var bankName: String
+    lateinit var debitOrCredit: String
+    var currentBalance: Float = 0.0f
+    lateinit var remainingBalance: String
 
     val args: CalenderViewFragmentArgs by navArgs()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,33 +57,75 @@ class BudgetEntryFragment : Fragment(R.layout.fragment_budget_entry) {
                 bankName = "NONE"
             }
         }
-        binding.debitCreditSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                debitOrCredit = parent?.getItemAtPosition(position).toString()
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                debitOrCredit = "Debit"
-            }
-        }
+        binding.debitCreditSpinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    debitOrCredit = parent?.getItemAtPosition(position).toString()
+                }
 
-        binding.editAmount.addTextChangedListener { it->
-            val enteredAmount = it.toString()
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    debitOrCredit = "Debit"
+                }
+            }
 
-            val rb = if(debitOrCredit.equals("Debit")){
+        binding.editAmount.addTextChangedListener { it ->
+            it.let {
+                val enteredAmount = it.toString()
+
+                val rb = if (debitOrCredit.equals("Debit")) {
                     (currentBalance - enteredAmount.toFloat())
 
-            }else{
-                (currentBalance + enteredAmount.toFloat())
+                } else {
+                    (currentBalance + enteredAmount.toFloat())
+                }
+                remainingBalance = rb.toString()
+                binding.remainingBalance.text = remainingBalance
             }
-            remainingBalance = rb.toString()
-            binding.remainingBalance.text = remainingBalance
-
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       /* everyday 11:59 run this code to update current balance using work manager
+        a = currentBalance + totalCredit
+        newcurbalance = a - totalspending*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         binding.submitBudgetEntry.setOnClickListener {
             val amount = binding.editAmount.text.toString()
             val purpose = binding.editPurpose.text.toString()
@@ -91,7 +133,14 @@ class BudgetEntryFragment : Fragment(R.layout.fragment_budget_entry) {
             val date = dateStringToMillis(args.selectedDate!!).toString()
             val revisedCurrentBalance = remainingBalance
 
-            submitBudgetEntryToDB(bankName,debitOrCredit,amount,purpose,date,revisedCurrentBalance)
+            submitBudgetEntryToDB(
+                bankName,
+                debitOrCredit,
+                amount,
+                purpose,
+                date,
+                revisedCurrentBalance
+            )
         }
     }
 
@@ -103,17 +152,26 @@ class BudgetEntryFragment : Fragment(R.layout.fragment_budget_entry) {
         date: String,
         revisedCurrentBalance: String
     ) {
-        viewModel.insertBudget(Budget(date = date,bankName = bankName,amount = amount.toFloat(),purpose = purpose,creditOrDebit = debitOrCredit))
+        viewModel.insertBudget(
+            Budget(
+                date = date,
+                bankName = bankName,
+                amount = amount.toFloat(),
+                purpose = purpose,
+                creditOrDebit = debitOrCredit
+            )
+        )
         profileVviewModel.updateCurrentBalance(revisedBalance = revisedCurrentBalance.toFloat())
-        Snackbar.make(binding.budgetEntryConstraint,"Entry added",Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(binding.budgetEntryConstraint, "Entry added", Snackbar.LENGTH_SHORT).show()
         findNavController().navigate(R.id.action_budgetEntryFragment_to_calenderViewFragment2)
     }
 
     private fun setSpinnerForCreditOrDebit() {
-        val creditDebitArray = ArrayList<String> ()
-        creditDebitArray.add("Credit")
+        val creditDebitArray = ArrayList<String>()
         creditDebitArray.add("Debit")
-        val arrayAdapter = ArrayAdapter(requireContext(),android.R.layout.simple_spinner_item,creditDebitArray)
+        creditDebitArray.add("Credit")
+        val arrayAdapter =
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, creditDebitArray)
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.debitCreditSpinner.adapter = arrayAdapter
     }
@@ -123,7 +181,7 @@ class BudgetEntryFragment : Fragment(R.layout.fragment_budget_entry) {
         profileVviewModel.profileLiveData.observe(viewLifecycleOwner) {
             val bankNames = ArrayList<String>()
             bankNames.add(it[0].bankName)
-            currentBalance  = it[0].currentBalance
+            currentBalance = it[0].currentBalance
             binding.remainingBalance.text = it[0].currentBalance.toString()
             val arrayAdapter =
                 ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, bankNames)

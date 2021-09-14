@@ -11,7 +11,7 @@ import com.example.budgetapp.entities.Profile
 @Database(
     entities = [Budget::class, Profile::class],
     version = 2,
-    exportSchema = true
+    exportSchema = false
 )
 @TypeConverters(Converters::class)
 abstract class BudgetDatabase : RoomDatabase() {

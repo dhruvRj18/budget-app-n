@@ -18,6 +18,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -61,27 +62,31 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         binding = FragmentProfileBinding.bind(view)
         activity?.title = "My Profile"
 
-        profileViewModel.profileLiveData.observe(viewLifecycleOwner) { profile ->
-            if (profile.size >=1) {
-                viewLifecycleOwner.lifecycleScope.launch {
-                    val listofImage = loadImageFromInternalStorage()
-                    Log.d("imageList", "$listofImage")
-                    for (i in listofImage) {
-                        if (i.name.endsWith("jpg")) {
-                            Glide.with(requireContext()).load(i.bitmap).circleCrop()
-                                .into(binding.profileImage)
+        profileViewModel.profileLiveData.observe(viewLifecycleOwner, object: androidx.lifecycle.Observer<List<Profile>>{
+            override fun onChanged(profile: List<Profile>?) {
+                if (profile!!.size >=1) {
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        val listofImage = loadImageFromInternalStorage()
+                        Log.d("imageList", "$listofImage")
+                        for (i in listofImage) {
+                            if (i.name.endsWith("jpg")) {
+                                Glide.with(requireContext()).load(i.bitmap).circleCrop()
+                                    .into(binding.profileImage)
+                            }
                         }
+                        binding.bankName.setText(profile!![0].bankName)
+                        binding.currentBalance.setText(profile!![0].currentBalance.toString())
+                        binding.materialCheckBox.isChecked = profile!![0].primaryBank
+                        binding.profileName.setText(profile!![0].name)
+                        binding.profileEmail.setText(profile!![0].email)
                     }
-                    binding.bankName.setText(profile[0].bankName)
-                    binding.currentBalance.setText(profile[0].currentBalance.toString())
-                    binding.materialCheckBox.isChecked = profile[0].primaryBank
-                    binding.profileName.setText(profile[0].name)
-                    binding.profileEmail.setText(profile[0].email)
+                } else {
+                    Toast.makeText(requireContext(), "Complete PRofile", Toast.LENGTH_SHORT).show()
                 }
-            } else {
-                Toast.makeText(requireContext(), "Complete PRofile", Toast.LENGTH_SHORT).show()
+                profileViewModel.profileLiveData.removeObserver(this)
             }
-        }
+
+        })
 
 
         binding.profileImage.setOnClickListener {

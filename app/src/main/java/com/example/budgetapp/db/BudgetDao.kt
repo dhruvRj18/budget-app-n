@@ -27,8 +27,15 @@ interface BudgetDao {
 
     @Query("SELECT SUM(amount) FROM budget WHERE date = :date AND creditOrDebit = 'Debit'")
     suspend fun getYesterDaySpending(date:Long):Float?
+
+
+    @Query("SELECT * FROM BUDGET WHERE date = :yesterDay")
+    suspend fun getYesterDayBudget(yesterDay:Long):List<Budget>
+
     @Delete
     suspend fun deleteEntry(budget: Budget)
+
+
 
     //make function using total credit and total spending to calculate latest currentBalance
 }

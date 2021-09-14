@@ -7,18 +7,25 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.budgetapp.R
 import com.example.budgetapp.databinding.FragmentReportsBinding
+import com.example.budgetapp.entities.Profile
 import com.example.budgetapp.ui.adapters.ReportsAdapter
 import com.example.budgetapp.ui.viewModels.BudgetViewModel
+import com.example.budgetapp.ui.viewModels.ProfileViewModel
 import com.example.budgetapp.util.UtilityFunctions
 import com.example.budgetapp.util.UtilityFunctions.dateMillisToString
 import com.example.budgetapp.util.UtilityFunctions.getEndDate
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.*
 
 @AndroidEntryPoint
@@ -55,7 +62,7 @@ class ReportsFragment : Fragment(R.layout.fragment_reports) {
                 val pos = viewHolder.adapterPosition
                 val budget = reportsAdapter.differ.currentList[pos]
 
-                budgetViewModel.deleteEntry(budget)
+               budgetViewModel.deleteEntry(budget)
                 Snackbar.make(view,"Item Deleted",Snackbar.LENGTH_LONG).apply {
                     setAction("UNDO"){
                         budgetViewModel.insertBudget(budget)
@@ -98,10 +105,6 @@ class ReportsFragment : Fragment(R.layout.fragment_reports) {
                     TODO("Not yet implemented")
                 }
             }
-
-
-
-
     }
 
     private fun openBottomSheet() {
@@ -126,8 +129,6 @@ class ReportsFragment : Fragment(R.layout.fragment_reports) {
         }
 
     }
-
-
 
     private fun setStartDate(): String {
         val dateInMillis = Calendar.getInstance().timeInMillis

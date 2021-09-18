@@ -23,7 +23,7 @@ interface BudgetDao {
      fun getTotalCredit():LiveData<Float>
 
     @Query("SELECT SUM(amount) FROM budget")
-     fun getTotalTransactionValue():LiveData<Float>
+     fun getSumOfBudget():LiveData<Float>
 
     @Query("SELECT * FROM budget WHERE date BETWEEN :startDate AND :endDate")
     suspend fun getReportsBetweenDates(startDate:Long, endDate:Long):List<Budget>

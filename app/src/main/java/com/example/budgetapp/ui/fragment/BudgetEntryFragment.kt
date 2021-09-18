@@ -152,11 +152,15 @@ class BudgetEntryFragment : Fragment(R.layout.fragment_budget_entry) {
         date: String,
         revisedCurrentBalance: String
     ) {
+        var amountToInsert = amount.toFloat()
+        if (debitOrCredit.equals("Debit")){
+           amountToInsert = -1*amountToInsert
+        }
         viewModel.insertBudget(
             Budget(
                 date = date,
                 bankName = bankName,
-                amount = amount.toFloat(),
+                amount =amountToInsert,
                 purpose = purpose,
                 creditOrDebit = debitOrCredit
             )

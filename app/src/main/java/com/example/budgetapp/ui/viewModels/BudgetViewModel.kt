@@ -29,7 +29,7 @@ class BudgetViewModel @Inject constructor(
 
     val totalDebit: LiveData<Float> = budgetRepository.getTotalSpending()
     val totalCredit: LiveData<Float> = budgetRepository.getTotalCredit()
-    val totalTransaction: LiveData<Float> = budgetRepository.getTotalTransaction()
+    val sumOfBudget: LiveData<Float> = budgetRepository.getSumOfBudget()
 
     var _yesterDaysSpending: MutableLiveData<Float> = MutableLiveData()
     val yesterDaysSpending: LiveData<Float> = _yesterDaysSpending

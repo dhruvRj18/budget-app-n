@@ -4,6 +4,7 @@ plugins {
     id 'androidx.navigation.safeargs'
     id 'dagger.hilt.android.plugin'
     id 'kotlin-kapt'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -34,11 +35,13 @@ android {
         jvmTarget = '1.8'
     }
     buildFeatures {
-        viewBinding = true
+        viewBinding  true
     }
 }
 
 dependencies {
+    implementation 'com.google.firebase:firebase-storage-ktx:20.0.0'
+    implementation 'com.google.firebase:firebase-firestore-ktx:23.0.3'
     def room_version = "2.3.0"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"

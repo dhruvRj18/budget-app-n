@@ -13,6 +13,7 @@ data class Profile(
     val profileImageFilePath:String,
     val bankName:String,
     val currentBalance:Float,
+    val initialBalance:Float,
     val primaryBank:Boolean
 ) {
 }

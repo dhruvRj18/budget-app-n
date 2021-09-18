@@ -10,7 +10,7 @@ import com.example.budgetapp.entities.Profile
 
 @Database(
     entities = [Budget::class, Profile::class],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

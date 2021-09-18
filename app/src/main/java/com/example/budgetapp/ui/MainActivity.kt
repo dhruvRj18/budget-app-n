@@ -3,7 +3,6 @@ package com.example.budgetapp.ui
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,15 +10,8 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import androidx.core.os.bundleOf
 
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import androidx.navigation.NavDeepLink
-import androidx.navigation.NavDeepLinkBuilder
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
@@ -27,21 +19,14 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.work.*
 import com.example.budgetapp.R
 import com.example.budgetapp.databinding.ActivityMainBinding
-import com.example.budgetapp.entities.Profile
 import com.example.budgetapp.ui.viewModels.BudgetViewModel
 import com.example.budgetapp.ui.viewModels.ProfileViewModel
-import com.example.budgetapp.util.Constants
 import com.example.budgetapp.util.Constants.CHANNEL_ID
-import com.example.budgetapp.util.Constants.NOTIFICATION_ID
-import com.example.budgetapp.util.Constants.PREFERENCE_DATE
 import com.example.budgetapp.util.Constants.PREFERENCE_NAME
 import com.example.budgetapp.util.UtilityFunctions.dateStringToMillis
 import com.example.budgetapp.util.UtilityFunctions.getEndDate
 import com.example.budgetapp.workmanager.NotifyUserWorker
-import com.example.budgetapp.workmanager.UpdateCurrentBalanceWorker
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -64,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 
         val view = binding.root
         setContentView(view)
-        clearSharedPrefOfYesterDay()
+       // clearSharedPrefOfYesterDay()
         getYesterDaysBudget()
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -74,7 +59,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun clearSharedPrefOfYesterDay() {
+   /* private fun clearSharedPrefOfYesterDay() {
         val myPref = this.getSharedPreferences(PREFERENCE_NAME, MODE_PRIVATE)
         val today = Calendar.getInstance().timeInMillis
         if (myPref.contains(PREFERENCE_DATE)) {
@@ -86,7 +71,7 @@ class MainActivity : AppCompatActivity() {
                 ed.commit()
             }
         }
-    }
+    }*/
 
 
     private fun getYesterDaysBudget() {
@@ -97,6 +82,7 @@ class MainActivity : AppCompatActivity() {
         budgetViewModel.yesterDaysSpending.observe(this) { yesterDaySpending ->
             yesterDaySpending?.let {
                 val dueDate = Calendar.getInstance()
+
                 //setting execution around 8 am
                 dueDate.set(Calendar.HOUR_OF_DAY, 8)
                 dueDate.set(Calendar.MINUTE, 0)

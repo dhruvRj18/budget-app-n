@@ -23,7 +23,7 @@ class BudgetRepository @Inject constructor(
 
      fun getTotalCredit() = budgetDao.getTotalCredit()
 
-     fun getTotalTransaction() = budgetDao.getTotalTransactionValue()
+     fun getSumOfBudget() = budgetDao.getSumOfBudget()
 
     suspend fun getYesterDaySpending(yesterDay:Long) = budgetDao.getYesterDaySpending(yesterDay)
     suspend fun getYesterDayBudget(yesterDay:Long) = budgetDao.getYesterDayBudget(yesterDay)

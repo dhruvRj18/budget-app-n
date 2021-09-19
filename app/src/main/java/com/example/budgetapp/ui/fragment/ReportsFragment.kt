@@ -7,21 +7,29 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.budgetapp.R
 import com.example.budgetapp.databinding.FragmentReportsBinding
+import com.example.budgetapp.entities.Profile
 import com.example.budgetapp.ui.adapters.ReportsAdapter
 import com.example.budgetapp.ui.viewModels.BudgetViewModel
+import com.example.budgetapp.ui.viewModels.ProfileViewModel
 import com.example.budgetapp.util.UtilityFunctions
 import com.example.budgetapp.util.UtilityFunctions.dateMillisToString
+import com.example.budgetapp.util.UtilityFunctions.getEndDate
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.*
 
 @AndroidEntryPoint
-class ReportsFragment : Fragment(R.layout.fragment_reports) {
+class ReportsFragment : Fragment(R.layout.fragment_reports), ReportsAdapter.MyOnclickListener {
     lateinit var binding: FragmentReportsBinding
     val budgetViewModel: BudgetViewModel by viewModels()
     lateinit var reportsAdapter: ReportsAdapter
@@ -38,10 +46,10 @@ class ReportsFragment : Fragment(R.layout.fragment_reports) {
         initializeRecyclerView()
         startDate = setStartDate()
 
-        val itemTouchHelperCallback = object :ItemTouchHelper.SimpleCallback(
+        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN,
             ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-        ){
+        ) {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
@@ -55,8 +63,8 @@ class ReportsFragment : Fragment(R.layout.fragment_reports) {
                 val budget = reportsAdapter.differ.currentList[pos]
 
                 budgetViewModel.deleteEntry(budget)
-                Snackbar.make(view,"Item Deleted",Snackbar.LENGTH_LONG).apply {
-                    setAction("UNDO"){
+                Snackbar.make(view, "Item Deleted", Snackbar.LENGTH_LONG).apply {
+                    setAction("UNDO") {
                         budgetViewModel.insertBudget(budget)
                     }
                     show()
@@ -97,10 +105,6 @@ class ReportsFragment : Fragment(R.layout.fragment_reports) {
                     TODO("Not yet implemented")
                 }
             }
-
-
-
-
     }
 
     private fun openBottomSheet() {
@@ -126,12 +130,6 @@ class ReportsFragment : Fragment(R.layout.fragment_reports) {
 
     }
 
-    private fun getEndDate(daysToCount: Int): String {
-        val cal = Calendar.getInstance()
-        cal.add(Calendar.DAY_OF_YEAR, -daysToCount)
-        return dateMillisToString(cal.timeInMillis)
-    }
-
     private fun setStartDate(): String {
         val dateInMillis = Calendar.getInstance().timeInMillis
         return dateMillisToString(dateInMillis)
@@ -139,7 +137,7 @@ class ReportsFragment : Fragment(R.layout.fragment_reports) {
     }
 
     private fun initializeRecyclerView() {
-        reportsAdapter = ReportsAdapter()
+        reportsAdapter = ReportsAdapter(this)
         binding.rcvReports.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = reportsAdapter
@@ -153,5 +151,10 @@ class ReportsFragment : Fragment(R.layout.fragment_reports) {
             ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, dateRangeArray)
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.dateRangeReportSpinner.adapter = arrayAdapter
+    }
+    override fun OnClick(position: Int) {
+        val currentBudgetItem = reportsAdapter.differ.currentList[position]
+        val bottomSheet = UpdateBudgetBottomSheetFragment(currentBudgetItem)
+        bottomSheet.show(requireActivity().supportFragmentManager,"UpdateBudget")
     }
 }

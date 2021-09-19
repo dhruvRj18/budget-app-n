@@ -23,7 +23,6 @@ class CalenderViewFragment : Fragment(R.layout.fragment_calender_view) {
                 CalenderViewFragmentDirections.actionCalenderViewFragmentToBudgetEntryFragment()
                     .setSelectedDate(selectedDate)
             findNavController().navigate(action)
-
         }
     }
 }

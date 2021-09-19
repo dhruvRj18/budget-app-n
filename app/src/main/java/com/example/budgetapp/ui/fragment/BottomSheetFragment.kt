@@ -31,9 +31,7 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding = StatasticsBottomSheetBinding.bind(view)
 
-        budgetViewModel.totalTransaction.observe(viewLifecycleOwner){
-            binding.totalTransactions.text =it.toString()
-        }
+
         budgetViewModel.totalCredit.observe(viewLifecycleOwner){
             binding.totalCredit.text =it.toString()
         }

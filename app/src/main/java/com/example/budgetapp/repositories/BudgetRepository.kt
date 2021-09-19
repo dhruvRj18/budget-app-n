@@ -16,12 +16,17 @@ class BudgetRepository @Inject constructor(
             startDate, endDate
         )
 
+    suspend fun updateBudget(amount:Float,purpose:String, id:Int) = budgetDao.updateBudget(amount, purpose, id)
+
+
      fun getTotalSpending() = budgetDao.getTotalSpending()
 
      fun getTotalCredit() = budgetDao.getTotalCredit()
 
-     fun getTotalTransaction() = budgetDao.getTotalTransactionValue()
+     fun getSumOfBudget() = budgetDao.getSumOfBudget()
 
+    suspend fun getYesterDaySpending(yesterDay:Long) = budgetDao.getYesterDaySpending(yesterDay)
+    suspend fun getYesterDayBudget(yesterDay:Long) = budgetDao.getYesterDayBudget(yesterDay)
     suspend fun deleteEntry(budget: Budget) = budgetDao.deleteEntry(budget)
 
 }

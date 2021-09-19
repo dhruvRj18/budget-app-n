@@ -19,6 +19,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -32,6 +33,7 @@ import com.example.budgetapp.util.Constants.PREFERENCE_NAME
 import com.example.budgetapp.util.Constants.PREFERENCE_PROFILE_EXISTANCE_KEY
 import com.example.budgetapp.util.UtilityFunctions
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.snackbar.SnackbarContentLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -72,7 +74,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             changeViewVisibilityPostRegistration()
         }else{
             changeViewVisibilityForRegistration()
-            Snackbar.make(binding.profileConstrain,"Balance Up to Date. Try again tomorrow.",Snackbar.LENGTH_SHORT).show()
         }
         binding.updateCurrentBalance.setOnClickListener {
             updateCurrentBalance()
@@ -92,7 +93,11 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                         }
                         binding.bankName.setText(profile!![0].bankName)
                         binding.initialBalance.setText(profile!![0].initialBalance.toString())
-                        binding.currentBalance.setText(profile!![0].currentBalance.toString())
+                        if (profile!![0].currentBalance == 0f){
+                            binding.currentBalance.setText(profile!![0].initialBalance.toString())
+                        }else{
+                            binding.currentBalance.setText(profile!![0].currentBalance.toString())
+                        }
                         binding.materialCheckBox.isChecked = profile!![0].primaryBank
                         binding.profileName.setText(profile!![0].name)
                         binding.profileEmail.setText(profile!![0].email)
@@ -106,9 +111,14 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         })
 
 
-        binding.profileImage.setOnClickListener {
+        binding.profileImage.setOnClickListener{
 
-            takePhoto.launch("image/*")
+            if (myPref.contains(PREFERENCE_PROFILE_EXISTANCE_KEY)){
+                Snackbar.make(binding.profileConstrain,"You can not changer profile picture",Snackbar.LENGTH_SHORT).show()
+            }else{
+                takePhoto.launch("image/*")
+            }
+
         }
 
         binding.submitProfile.setOnClickListener {
@@ -136,14 +146,20 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     }
 
     private fun updateCurrentBalance() {
-
         budgetViewModel.sumOfBudget.observe(viewLifecycleOwner){sum->
             profileViewModel.profileLiveData.observe(viewLifecycleOwner){
-               val initBal = it[0].initialBalance
-               val newCurBal = initBal - sum
+                var newCurBal : Float
+                val initBal = it!![0].initialBalance
+                if(sum != null) {
+                    newCurBal = initBal + sum
+                }else{
+                    newCurBal = initBal
+                }
+                Log.d("TAG", "updateCurrentBalance:new bal:  $newCurBal \n sum : $sum \n init $initBal")
                 profileViewModel.updateCurrentBalance(newCurBal)
             }
         }
+        findNavController().navigate(R.id.action_global_profileFragment)
 
     }
 

@@ -59,20 +59,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-   /* private fun clearSharedPrefOfYesterDay() {
-        val myPref = this.getSharedPreferences(PREFERENCE_NAME, MODE_PRIVATE)
-        val today = Calendar.getInstance().timeInMillis
-        if (myPref.contains(PREFERENCE_DATE)) {
-            Log.d("TAG", "Today:${Calendar.getInstance().timeInMillis} \n" +
-                    "PREF date: ${myPref.getLong(PREFERENCE_DATE,0L)} ")
-            if (today > myPref.getLong(PREFERENCE_DATE, 0L)) {
-               val ed =  myPref.edit()
-                ed.clear()
-                ed.commit()
-            }
-        }
-    }*/
-
 
     private fun getYesterDaysBudget() {
 

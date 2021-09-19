@@ -5,7 +5,6 @@ import java.util.*
 
 object UtilityFunctions {
 
-
      fun dateStringToMillis(dateInString:String):Long{
         val dateFormat = SimpleDateFormat("dd/MM/yyyy")
         val date = dateFormat.parse(dateInString)

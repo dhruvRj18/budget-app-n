@@ -22,7 +22,6 @@ import com.example.budgetapp.databinding.ActivityMainBinding
 import com.example.budgetapp.ui.viewModels.BudgetViewModel
 import com.example.budgetapp.ui.viewModels.ProfileViewModel
 import com.example.budgetapp.util.Constants.CHANNEL_ID
-import com.example.budgetapp.util.Constants.PREFERENCE_NAME
 import com.example.budgetapp.util.UtilityFunctions.dateStringToMillis
 import com.example.budgetapp.util.UtilityFunctions.getEndDate
 import com.example.budgetapp.workmanager.NotifyUserWorker

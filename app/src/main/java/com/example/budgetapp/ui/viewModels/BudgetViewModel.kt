@@ -2,7 +2,6 @@ package com.example.budgetapp.ui.viewModels
 
 import android.util.Log
 import android.widget.Toast
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -48,7 +47,7 @@ class BudgetViewModel @Inject constructor(
 
     fun yesterDaysBudget(yesterDay: Long) = viewModelScope.launch {
         val response = budgetRepository.getYesterDayBudget(yesterDay)
-        response?.let {
+        response.let {
             Log.d("TAG", "yesterDaysSpending: $response")
             _yesterDaysBudget.postValue(response!!)
         }

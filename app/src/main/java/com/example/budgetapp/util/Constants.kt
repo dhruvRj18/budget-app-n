@@ -8,4 +8,7 @@ object Constants {
     const val PREFERENCE_NAME = "PROFILE_PREFERENCE"
     const val PREFERENCE_PROFILE_EXISTANCE_KEY = "PREFERENCE_PROFILE_EXISTANCE_KEY"
     const val PREFERENCE_PROFILE_EXISTANCE = false
+
+
+    const val BASE_URL = ""
 }

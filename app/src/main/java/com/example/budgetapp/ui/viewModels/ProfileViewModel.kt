@@ -19,10 +19,13 @@ class ProfileViewModel @Inject constructor(
     val profileLiveData:LiveData<List<Profile>> = profileRepository.getProfile()
 
     fun insertProfileData(profile: Profile) = viewModelScope.launch {
-        profileRepository.insertProfileData(profile )
+        profileRepository.insertProfileData(profile)
+        profileRepository.insertProfileDataToApi(profile)
     }
 
     fun updateCurrentBalance(revisedBalance:Float) = viewModelScope.launch {
         profileRepository.updateCurrentBalance(revisedBalance)
     }
+
+
 }

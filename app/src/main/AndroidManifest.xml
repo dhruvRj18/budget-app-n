@@ -13,6 +13,7 @@
         android:name=".BudgetApplication"
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/Theme.BudgetApp">
         <activity android:name=".ui.MainActivity"
             android:exported="true">

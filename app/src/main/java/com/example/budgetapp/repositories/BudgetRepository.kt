@@ -2,10 +2,12 @@ package com.example.budgetapp.repositories
 
 import com.example.budgetapp.db.BudgetDao
 import com.example.budgetapp.entities.Budget
+import com.example.budgetapp.netowork.Api
 import javax.inject.Inject
 
 class BudgetRepository @Inject constructor(
-    val budgetDao: BudgetDao
+    val budgetDao: BudgetDao,
+    val api: Api
 ) {
     suspend fun insertBudget(budget: Budget) = budgetDao.insertBudget(budget)
 
@@ -28,5 +30,9 @@ class BudgetRepository @Inject constructor(
     suspend fun getYesterDaySpending(yesterDay:Long) = budgetDao.getYesterDaySpending(yesterDay)
     suspend fun getYesterDayBudget(yesterDay:Long) = budgetDao.getYesterDayBudget(yesterDay)
     suspend fun deleteEntry(budget: Budget) = budgetDao.deleteEntry(budget)
+
+
+    suspend fun insertBudgetToAPI(budget: Budget) = api.insertBudgetEntry(budget)
+
 
 }

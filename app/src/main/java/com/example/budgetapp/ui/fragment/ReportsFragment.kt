@@ -113,7 +113,11 @@ class ReportsFragment : Fragment(R.layout.fragment_reports), ReportsAdapter.MyOn
     }
 
     private fun getAllEntries() {
-        budgetViewModel.allBudgetEntries.observe(viewLifecycleOwner) {
+       /* budgetViewModel.allBudgetEntries.observe(viewLifecycleOwner) {
+            reportsAdapter.differ.submitList(it)
+        }*/
+        budgetViewModel.getBudgetEntiesFromAPI()
+        budgetViewModel.allBudgetEntriesFromAPI.observe(viewLifecycleOwner){
             reportsAdapter.differ.submitList(it)
         }
     }

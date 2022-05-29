@@ -89,41 +89,9 @@ class BudgetEntryFragment : Fragment(R.layout.fragment_budget_entry) {
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
        /* everyday 11:59 run this code to update current balance using work manager
         a = currentBalance + totalCredit
         newcurbalance = a - totalspending*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         binding.submitBudgetEntry.setOnClickListener {
@@ -182,7 +150,17 @@ class BudgetEntryFragment : Fragment(R.layout.fragment_budget_entry) {
 
     private fun getProfileData() {
 
-        profileVviewModel.profileLiveData.observe(viewLifecycleOwner) {
+       /* profileVviewModel.profileLiveData.observe(viewLifecycleOwner) {
+            val bankNames = ArrayList<String>()
+            bankNames.add(it[0].bankName)
+            currentBalance = it[0].currentBalance
+            binding.remainingBalance.text = it[0].currentBalance.toString()
+            val arrayAdapter =
+                ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, bankNames)
+            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.bankSpinner.adapter = arrayAdapter
+        }*/
+        profileVviewModel.profileLiveDataAPI.observe(viewLifecycleOwner){
             val bankNames = ArrayList<String>()
             bankNames.add(it[0].bankName)
             currentBalance = it[0].currentBalance

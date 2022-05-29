@@ -10,5 +10,5 @@ object Constants {
     const val PREFERENCE_PROFILE_EXISTANCE = false
 
 
-    const val BASE_URL = ""
+    const val BASE_URL = "http://192.168.0.8:5000/api/"
 }

@@ -105,11 +105,20 @@ class MainActivity : AppCompatActivity() {
     private fun checkForProfileData() {
         // if no profile data -> complete profile first
 
-        profileViewModel.profileLiveData.observe(this) {
-            if (it.size < 1) {
+        /*profileViewModel.profileLiveData.observe(this) {
+            if (it.isEmpty()) {
+                navController.navigate(R.id.action_global_profileFragment)
+            }
+        }*/
+        profileViewModel.getProfileDataFromAPI()
+
+        profileViewModel.profileLiveDataAPI.observe(this){
+
+            if (it.isEmpty()){
                 navController.navigate(R.id.action_global_profileFragment)
             }
         }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

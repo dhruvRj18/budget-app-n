@@ -7,16 +7,13 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
-import android.opengl.Visibility
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -31,9 +28,7 @@ import com.example.budgetapp.ui.viewModels.BudgetViewModel
 import com.example.budgetapp.ui.viewModels.ProfileViewModel
 import com.example.budgetapp.util.Constants.PREFERENCE_NAME
 import com.example.budgetapp.util.Constants.PREFERENCE_PROFILE_EXISTANCE_KEY
-import com.example.budgetapp.util.UtilityFunctions
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.snackbar.SnackbarContentLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -79,9 +74,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             updateCurrentBalance()
         }
 
-        profileViewModel.profileLiveData.observe(viewLifecycleOwner, object: androidx.lifecycle.Observer<List<Profile>>{
-            override fun onChanged(profile: List<Profile>?) {
-                if (profile!!.size >=1) {
+        profileViewModel.getProfileDataFromAPI()
+        profileViewModel.profileLiveDataAPI.observe(viewLifecycleOwner){
+                it.let {profile->
                     viewLifecycleOwner.lifecycleScope.launch {
                         val listofImage = loadImageFromInternalStorage()
                         Log.d("imageList", "$listofImage")
@@ -91,25 +86,19 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                                     .into(binding.profileImage)
                             }
                         }
-                        binding.bankName.setText(profile!![0].bankName)
-                        binding.initialBalance.setText(profile!![0].initialBalance.toString())
-                        if (profile!![0].currentBalance == 0f){
-                            binding.currentBalance.setText(profile!![0].initialBalance.toString())
-                        }else{
-                            binding.currentBalance.setText(profile!![0].currentBalance.toString())
-                        }
-                        binding.materialCheckBox.isChecked = profile!![0].primaryBank
-                        binding.profileName.setText(profile!![0].name)
-                        binding.profileEmail.setText(profile!![0].email)
                     }
-                } else {
-                    Toast.makeText(requireContext(), "Complete PRofile", Toast.LENGTH_SHORT).show()
+                        binding.bankName.setText(profile[0].bankName)
+                        binding.initialBalance.setText(profile[0].initialBalance.toString())
+                        if (profile[0].currentBalance == 0f){
+                            binding.currentBalance.setText(profile[0].initialBalance.toString())
+                        }else{
+                            binding.currentBalance.setText(profile[0].currentBalance.toString())
+                        }
+                        binding.materialCheckBox.isChecked = profile[0].primaryBank
+                        binding.profileName.setText(profile[0].name)
+                        binding.profileEmail.setText(profile[0].email)
+                    }
                 }
-                profileViewModel.profileLiveData.removeObserver(this)
-            }
-
-        })
-
 
         binding.profileImage.setOnClickListener{
 
@@ -147,7 +136,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private fun updateCurrentBalance() {
         budgetViewModel.sumOfBudget.observe(viewLifecycleOwner){sum->
-            profileViewModel.profileLiveData.observe(viewLifecycleOwner){
+            profileViewModel.profileLiveDataAPI.observe(viewLifecycleOwner){
                 var newCurBal : Float
                 val initBal = it!![0].initialBalance
                 if(sum != null) {

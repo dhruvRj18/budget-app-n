@@ -1,6 +1,7 @@
 package com.example.budgetapp.ui.viewModels
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.budgetapp.entities.Profile
@@ -16,16 +17,23 @@ class ProfileViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    val profileLiveData:LiveData<List<Profile>> = profileRepository.getProfile()
+    //val profileLiveData:LiveData<List<Profile>> = profileRepository.getProfile()
+    var profileLiveDataAPI = MutableLiveData<List<Profile>>()
+
 
     fun insertProfileData(profile: Profile) = viewModelScope.launch {
-        profileRepository.insertProfileData(profile)
+        profileRepository.insertProfileData(profile )
         profileRepository.insertProfileDataToApi(profile)
     }
 
     fun updateCurrentBalance(revisedBalance:Float) = viewModelScope.launch {
         profileRepository.updateCurrentBalance(revisedBalance)
     }
+
+    fun getProfileDataFromAPI() = viewModelScope.launch {
+        profileLiveDataAPI.postValue(profileRepository.getProfileDataFromAPI())
+    }
+
 
 
 }

@@ -18,4 +18,6 @@ class ProfileRepository @Inject constructor(val profileDao: ProfileDao, val api:
 
     suspend fun insertProfileDataToApi(profile: Profile) = api.insertProfileData(profile)
 
+    suspend fun getProfileDataFromAPI() = api.getProfileData()
+
 }

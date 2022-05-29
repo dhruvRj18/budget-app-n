@@ -1,6 +1,7 @@
 package com.example.budgetapp.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -160,6 +161,7 @@ class BudgetEntryFragment : Fragment(R.layout.fragment_budget_entry) {
             arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.bankSpinner.adapter = arrayAdapter
         }*/
+        profileVviewModel.getProfileDataFromAPI()
         profileVviewModel.profileLiveDataAPI.observe(viewLifecycleOwner){
             val bankNames = ArrayList<String>()
             bankNames.add(it[0].bankName)

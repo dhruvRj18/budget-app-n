@@ -65,6 +65,7 @@ class BudgetViewModel @Inject constructor(
 
     fun insertBudget(budget: Budget) = viewModelScope.launch {
         budgetRepository.insertBudget(budget)
+        budgetRepository.insertBudgetToAPI(budget)
 
     }
 
@@ -74,6 +75,7 @@ class BudgetViewModel @Inject constructor(
         _dateRangeBudgetEntries.postValue(response)
 
     }
+
 
 
 }

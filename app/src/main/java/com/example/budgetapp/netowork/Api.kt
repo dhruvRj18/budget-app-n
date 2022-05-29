@@ -26,6 +26,7 @@ interface Api {
         @Body budget: Budget
     ):Budget
 
-
+    @GET("budget")
+    suspend fun getBudgetEntries():List<Budget>
 
 }

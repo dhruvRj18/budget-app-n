@@ -22,6 +22,7 @@ class BudgetViewModel @Inject constructor(
 
 
     val allBudgetEntries: LiveData<List<Budget>> = budgetRepository.getAllBudgetEntries()
+    val allBudgetEntriesFromAPI = MutableLiveData<List<Budget>>()
 
     var _dateRangeBudgetEntries: MutableLiveData<List<Budget>> = MutableLiveData()
     val dateRangeBudgetEntries: LiveData<List<Budget>> = _dateRangeBudgetEntries
@@ -76,6 +77,8 @@ class BudgetViewModel @Inject constructor(
 
     }
 
-
+    fun getBudgetEntiesFromAPI()  = viewModelScope.launch {
+        allBudgetEntriesFromAPI.postValue(budgetRepository.getBudgetEntriesFromAPI())
+    }
 
 }

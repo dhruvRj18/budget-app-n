@@ -34,5 +34,7 @@ class BudgetRepository @Inject constructor(
 
     suspend fun insertBudgetToAPI(budget: Budget) = api.insertBudgetEntry(budget)
 
+    suspend fun getBudgetEntriesFromAPI() = api.getBudgetEntries()
+
 
 }

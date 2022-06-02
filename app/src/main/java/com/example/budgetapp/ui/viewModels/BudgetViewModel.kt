@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.budgetapp.entities.Budget
+import com.example.budgetapp.entities.BudgetDB
 import com.example.budgetapp.repositories.BudgetRepository
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +23,7 @@ class BudgetViewModel @Inject constructor(
 
 
     val allBudgetEntries: LiveData<List<Budget>> = budgetRepository.getAllBudgetEntries()
-    val allBudgetEntriesFromAPI = MutableLiveData<List<Budget>>()
+    val allBudgetEntriesFromAPI = MutableLiveData<List<BudgetDB>?>()
 
     var _dateRangeBudgetEntries: MutableLiveData<List<Budget>> = MutableLiveData()
     val dateRangeBudgetEntries: LiveData<List<Budget>> = _dateRangeBudgetEntries
@@ -58,14 +59,16 @@ class BudgetViewModel @Inject constructor(
         budgetRepository.updateBudget(amount, purpose, id)
     }
 
-    fun deleteEntry(budget: Budget) = viewModelScope.launch {
-        budgetRepository.deleteEntry(budget)
+    fun deleteEntry(budgetDb:BudgetDB) = viewModelScope.launch {
+        //budgetRepository.deleteEntry(budget)
+       // Log.d("ss","${budgetDb._id}")
+        budgetRepository.deleteBudgetFromAPI(budgetDb._id?.`$oid`!!)
 
     }
 
 
-    fun insertBudget(budget: Budget) = viewModelScope.launch {
-        budgetRepository.insertBudget(budget)
+    fun insertBudget(budget: BudgetDB) = viewModelScope.launch {
+        //budgetRepository.insertBudget(budget)
         budgetRepository.insertBudgetToAPI(budget)
 
     }

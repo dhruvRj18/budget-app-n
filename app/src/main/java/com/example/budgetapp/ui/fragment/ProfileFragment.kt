@@ -16,7 +16,6 @@ import android.view.View.VISIBLE
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -46,7 +45,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private lateinit var myPref : SharedPreferences
 
     private val takePhoto = registerForActivityResult(ActivityResultContracts.GetContent()) { result ->
-        filepath = result
+        result?.let {filepath = result  }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val source = ImageDecoder.createSource(requireContext().contentResolver!!, filepath)
             bitmap = ImageDecoder.decodeBitmap(source)

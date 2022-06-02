@@ -1,16 +1,14 @@
 package com.example.budgetapp.netowork
 
 
-import com.example.budgetapp.entities.Budget
+import com.example.budgetapp.entities.BudgetDB
 import com.example.budgetapp.entities.Profile
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface Api {
 
 
-//User end points
+    //User end points
     @POST("user")
     suspend fun insertProfileData(
         @Body profile: Profile
@@ -23,10 +21,15 @@ interface Api {
 
     @POST("budget")
     suspend fun insertBudgetEntry(
-        @Body budget: Budget
-    ):Budget
+        @Body budget: BudgetDB
+    ): String
 
     @GET("budget")
-    suspend fun getBudgetEntries():List<Budget>
+    suspend fun getBudgetEntries(): List<BudgetDB>
+
+    @DELETE("budget/{id}")
+    suspend fun deleteBudget(
+        @Path("id") budget_id: String
+    ): String
 
 }

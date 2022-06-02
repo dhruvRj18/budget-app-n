@@ -16,7 +16,7 @@ class CalenderViewFragment : Fragment(R.layout.fragment_calender_view) {
         setHasOptionsMenu(true)
         activity?.title = "Enter Your Budget"
 
-        binding.calView.setOnDateChangeListener { view, year, month, dayOfMonth ->
+        binding.calView.setOnDateChangeListener { _, year, month, dayOfMonth ->
 
             val selectedDate = "${dayOfMonth}/${month + 1}/${year}"
             val action =

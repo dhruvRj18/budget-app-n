@@ -13,6 +13,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.budgetapp.R
 import com.example.budgetapp.databinding.FragmentBudgetEntryBinding
 import com.example.budgetapp.entities.Budget
+import com.example.budgetapp.entities.BudgetDB
 import com.example.budgetapp.ui.adapters.ReportsAdapter
 import com.example.budgetapp.ui.viewModels.BudgetViewModel
 import com.example.budgetapp.ui.viewModels.ProfileViewModel
@@ -126,12 +127,13 @@ class BudgetEntryFragment : Fragment(R.layout.fragment_budget_entry) {
            amountToInsert = -1*amountToInsert
         }
         viewModel.insertBudget(
-            Budget(
-                date = date,
+            BudgetDB(
+                date = date.toLong(),
                 bankName = bankName,
-                amount =amountToInsert,
+                amount =amountToInsert.toInt(),
                 purpose = purpose,
-                creditOrDebit = debitOrCredit
+                creditOrDebit = debitOrCredit,
+                _id=null
             )
         )
         profileVviewModel.updateCurrentBalance(revisedBalance = revisedCurrentBalance.toFloat())

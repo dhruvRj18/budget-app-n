@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.example.budgetapp.R
 import com.example.budgetapp.databinding.ItemBudgetBinding
 import com.example.budgetapp.entities.Budget
+import com.example.budgetapp.entities.BudgetDB
 import com.example.budgetapp.util.UtilityFunctions.dateMillisToString
 import java.text.SimpleDateFormat
 import java.util.*
@@ -32,12 +33,12 @@ class ReportsAdapter(
 
             }
         }
-    private val differCallback = object : DiffUtil.ItemCallback<Budget>(){
-        override fun areItemsTheSame(oldItem: Budget, newItem: Budget): Boolean {
-            return oldItem.id == newItem.id
+    private val differCallback = object : DiffUtil.ItemCallback<BudgetDB>(){
+        override fun areItemsTheSame(oldItem: BudgetDB, newItem: BudgetDB): Boolean {
+            return oldItem._id == newItem._id
         }
 
-        override fun areContentsTheSame(oldItem: Budget, newItem: Budget): Boolean {
+        override fun areContentsTheSame(oldItem: BudgetDB, newItem: BudgetDB): Boolean {
            return oldItem == newItem
         }
     }

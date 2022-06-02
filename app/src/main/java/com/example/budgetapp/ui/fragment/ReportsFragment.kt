@@ -65,7 +65,7 @@ class ReportsFragment : Fragment(R.layout.fragment_reports), ReportsAdapter.MyOn
                 budgetViewModel.deleteEntry(budget)
                 Snackbar.make(view, "Item Deleted", Snackbar.LENGTH_LONG).apply {
                     setAction("UNDO") {
-                        budgetViewModel.insertBudget(budget)
+                       // budgetViewModel.insertBudget(budget)
                     }
                     show()
                 }
@@ -93,10 +93,10 @@ class ReportsFragment : Fragment(R.layout.fragment_reports), ReportsAdapter.MyOn
                 ) {
                     when (parent?.getItemAtPosition(position)) {
 
-                        "1 Week" -> getReportBetweenDates(startDate, getEndDate(7))
+                       /* "1 Week" -> getReportBetweenDates(startDate, getEndDate(7))
                         "1 Month" -> getReportBetweenDates(startDate, getEndDate(30))
                         "6 Month" -> getReportBetweenDates(startDate, getEndDate(180))
-                        "Show All" -> getAllEntries()
+                        "Show All" -> getAllEntries()*/
                     }
 
                 }
@@ -122,7 +122,7 @@ class ReportsFragment : Fragment(R.layout.fragment_reports), ReportsAdapter.MyOn
         }
     }
 
-    private fun getReportBetweenDates(startDate: String, endDate: String) {
+    /*private fun getReportBetweenDates(startDate: String, endDate: String) {
         val start = UtilityFunctions.dateStringToMillis(endDate)
         val end = UtilityFunctions.dateStringToMillis(startDate)
         Log.d("TAG", "getReportBetweenDates:$start : $startDate \n $end : $endDate ")
@@ -132,7 +132,7 @@ class ReportsFragment : Fragment(R.layout.fragment_reports), ReportsAdapter.MyOn
             reportsAdapter.differ.submitList(it)
         }
 
-    }
+    }*/
 
     private fun setStartDate(): String {
         val dateInMillis = Calendar.getInstance().timeInMillis
@@ -158,7 +158,7 @@ class ReportsFragment : Fragment(R.layout.fragment_reports), ReportsAdapter.MyOn
     }
     override fun OnClick(position: Int) {
         val currentBudgetItem = reportsAdapter.differ.currentList[position]
-        val bottomSheet = UpdateBudgetBottomSheetFragment(currentBudgetItem)
-        bottomSheet.show(requireActivity().supportFragmentManager,"UpdateBudget")
+        //val bottomSheet = UpdateBudgetBottomSheetFragment(currentBudgetItem)
+       // bottomSheet.show(requireActivity().supportFragmentManager,"UpdateBudget")
     }
 }

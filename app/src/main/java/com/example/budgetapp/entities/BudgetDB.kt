@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class BudgetDB(
-    val _id: Id?,
+    val _id: Id?= null,
     val amount: Int,
     val bankName: String,
     val creditOrDebit: String,

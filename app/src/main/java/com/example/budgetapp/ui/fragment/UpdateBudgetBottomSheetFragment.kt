@@ -43,8 +43,14 @@ class UpdateBudgetBottomSheetFragment(
                 updatedPurpose,
                 currentBudgetItem.id!!
             )*/
-            Log.d("ss","$currentBudgetItem")
-            budgetViewModel.updateBudgetFromAPI(currentBudgetItem,currentBudgetItem._id?.`$oid`!!)
+            val updatedBudget = BudgetDB(
+                amount = updatedAmount.toInt(),
+                purpose = updatedPurpose,
+                bankName = currentBudgetItem.bankName,
+                creditOrDebit = currentBudgetItem.creditOrDebit,
+                date = currentBudgetItem.date,
+            )
+            budgetViewModel.updateBudgetFromAPI(updatedBudget, currentBudgetItem._id?.`$oid`!!)
             dismiss()
         }
 

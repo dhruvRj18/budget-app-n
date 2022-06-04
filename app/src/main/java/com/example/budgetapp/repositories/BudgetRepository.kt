@@ -39,4 +39,6 @@ class BudgetRepository @Inject constructor(
 
     suspend fun deleteBudgetFromAPI(budget_id:String) = api.deleteBudget(budget_id)
 
+    suspend fun updateBudgetFromAPI(budget: BudgetDB, budget_id: String) = api.updateBudget(budget, budget_id)
+
 }

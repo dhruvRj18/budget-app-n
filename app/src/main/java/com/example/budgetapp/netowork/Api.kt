@@ -32,4 +32,10 @@ interface Api {
         @Path("id") budget_id: String
     ): String
 
+    @POST("budget/{id}")
+    suspend fun updateBudget(
+        @Body budget: BudgetDB,
+        @Path("id") budget_id: String
+    )
+
 }

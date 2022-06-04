@@ -1,6 +1,7 @@
 package com.example.budgetapp.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,13 +9,14 @@ import androidx.fragment.app.viewModels
 import com.example.budgetapp.R
 import com.example.budgetapp.databinding.UpdateBudgetBottomSheetBinding
 import com.example.budgetapp.entities.Budget
+import com.example.budgetapp.entities.BudgetDB
 import com.example.budgetapp.ui.viewModels.BudgetViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class UpdateBudgetBottomSheetFragment(
-    val currentBudgetItem: Budget
+    val currentBudgetItem: BudgetDB
 ) : BottomSheetDialogFragment() {
 
     lateinit var binding: UpdateBudgetBottomSheetBinding
@@ -36,11 +38,19 @@ class UpdateBudgetBottomSheetFragment(
         binding.updateBudgetEntry.setOnClickListener {
             val updatedAmount = binding.updateAmount.text.toString()
             val updatedPurpose = binding.updatePerpose.text.toString()
-            budgetViewModel.updateBudget(
+            /*budgetViewModel.updateBudget(
                 updatedAmount.toFloat(),
                 updatedPurpose,
                 currentBudgetItem.id!!
+            )*/
+            val updatedBudget = BudgetDB(
+                amount = updatedAmount.toInt(),
+                purpose = updatedPurpose,
+                bankName = currentBudgetItem.bankName,
+                creditOrDebit = currentBudgetItem.creditOrDebit,
+                date = currentBudgetItem.date,
             )
+            budgetViewModel.updateBudgetFromAPI(updatedBudget, currentBudgetItem._id?.`$oid`!!)
             dismiss()
         }
 

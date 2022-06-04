@@ -158,7 +158,7 @@ class ReportsFragment : Fragment(R.layout.fragment_reports), ReportsAdapter.MyOn
     }
     override fun OnClick(position: Int) {
         val currentBudgetItem = reportsAdapter.differ.currentList[position]
-        //val bottomSheet = UpdateBudgetBottomSheetFragment(currentBudgetItem)
-       // bottomSheet.show(requireActivity().supportFragmentManager,"UpdateBudget")
+        val bottomSheet = UpdateBudgetBottomSheetFragment(currentBudgetItem)
+        bottomSheet.show(requireActivity().supportFragmentManager,"UpdateBudget")
     }
 }

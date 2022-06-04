@@ -59,9 +59,12 @@ class BudgetViewModel @Inject constructor(
         budgetRepository.updateBudget(amount, purpose, id)
     }
 
+    fun updateBudgetFromAPI(budget: BudgetDB, budget_id:String) = viewModelScope.launch {
+        budgetRepository.updateBudgetFromAPI(budget, budget_id)
+    }
+
     fun deleteEntry(budgetDb:BudgetDB) = viewModelScope.launch {
         //budgetRepository.deleteEntry(budget)
-       // Log.d("ss","${budgetDb._id}")
         budgetRepository.deleteBudgetFromAPI(budgetDb._id?.`$oid`!!)
 
     }
